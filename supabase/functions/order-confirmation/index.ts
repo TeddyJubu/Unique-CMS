@@ -191,10 +191,21 @@ Deno.serve(async (req) => {
       return json({ error: "Email is not configured yet.", configured: false }, 503);
     }
 
+    // Validate the caller's key by using it against the database — robust to
+    // legacy JWT vs new publishable key formats.
     const authHeader = req.headers.get("Authorization") ?? "";
-    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
-    if (authHeader !== `Bearer ${anonKey}`) {
+    const callerKey = authHeader.replace(/^Bearer\s+/i, "").trim();
+    if (!callerKey) {
       return json({ error: "Unauthorized" }, 401);
+    }
+    {
+      const { error: authErr } = await createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        callerKey,
+      ).from("shop_settings").select("id", { count: "exact", head: true });
+      if (authErr) {
+        return json({ error: "Unauthorized" }, 401);
+      }
     }
 
     const supabase = createClient(
