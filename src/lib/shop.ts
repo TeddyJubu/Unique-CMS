@@ -288,6 +288,7 @@ export async function createOrder(
   order: {
     customer_name: string
     customer_phone: string
+    customer_email: string | null
     customer_address: string
     district: string
     area_type: "inside_dhaka" | "outside_dhaka"
@@ -314,6 +315,7 @@ export async function createOrder(
     p_customer: {
       customer_name: order.customer_name,
       customer_phone: order.customer_phone,
+      customer_email: order.customer_email,
       customer_address: order.customer_address,
       district: order.district,
       area_type: order.area_type,

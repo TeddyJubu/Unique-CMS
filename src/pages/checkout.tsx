@@ -5,6 +5,7 @@ import { navigate } from "@/lib/router"
 import { Button } from "@/components/ui/button"
 import { createOrder, fetchShopSettings, formatPrice, validateCoupon } from "@/lib/shop"
 import type { ShopSettings } from "@/lib/supabase"
+import { supabase } from "@/lib/supabase"
 import { CheckCircle2, ArrowRight, TicketPercent, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +23,7 @@ export function CheckoutPage() {
   const [form, setForm] = useState({
     customer_name: "",
     customer_phone: "",
+    customer_email: "",
     customer_address: "",
     district: "",
     area_type: "inside_dhaka" as "inside_dhaka" | "outside_dhaka",
@@ -74,6 +76,7 @@ export function CheckoutPage() {
         {
           customer_name: form.customer_name,
           customer_phone: form.customer_phone,
+          customer_email: form.customer_email.trim() || null,
           customer_address: form.customer_address,
           district: form.district,
           area_type: form.area_type,
@@ -96,6 +99,12 @@ export function CheckoutPage() {
       )
       setSuccess({ orderNumber: order.order_number })
       clearCart()
+      // Fire-and-forget confirmation email; order is already placed.
+      if (form.customer_email.trim()) {
+        supabase.functions
+          .invoke("order-confirmation", { body: { order_id: order.id } })
+          .catch((e) => console.error("confirmation email failed", e))
+      }
     } catch (err) {
       console.error(err)
       alert(t("error"))
@@ -170,6 +179,23 @@ export function CheckoutPage() {
                 className={inputClass}
                 placeholder="01XXXXXXXXX"
               />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                {locale === "bn" ? "ইমেইল (ঐচ্ছিক)" : "Email (optional)"}
+              </label>
+              <input
+                type="email"
+                value={form.customer_email}
+                onChange={(e) => setForm({ ...form, customer_email: e.target.value })}
+                className={inputClass}
+                placeholder={locale === "bn" ? "আপনার ইমেইল" : "you@example.com"}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                {locale === "bn"
+                  ? "অর্ডার কনফার্মেশন ইমেইল পেতে চাইলে দিন"
+                  : "Get an order confirmation email"}
+              </p>
             </div>
             <div>
               <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-muted-foreground">

@@ -53,6 +53,7 @@ export type Order = {
   order_number: string
   customer_name: string
   customer_phone: string
+  customer_email: string | null
   customer_address: string
   district: string
   area_type: "inside_dhaka" | "outside_dhaka"

@@ -2,3 +2,6 @@ project_id = "jsfhknpabmnhryjeesjk"
 
 [functions.assistant-bridge]
 verify_jwt = false
+
+[functions.order-confirmation]
+verify_jwt = false
