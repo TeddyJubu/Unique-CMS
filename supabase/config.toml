@@ -1,0 +1,4 @@
+project_id = "jsfhknpabmnhryjeesjk"
+
+[functions.assistant-bridge]
+verify_jwt = false
