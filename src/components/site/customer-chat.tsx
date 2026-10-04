@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { checkCustomerAssistant, sendCustomerMessage, type ProductCard } from "@/lib/assistant"
+import { fetchShopSettings } from "@/lib/shop"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { LoaderCircle, MessageCircle, Send, Sparkles, X } from "lucide-react"
@@ -14,7 +15,7 @@ type Message = {
   whatsapp?: string
 }
 
-function WhatsAppLinkButton({ phone, label }: { phone: string; label: string }) {
+function WhatsAppLinkButton({ phone, label, full }: { phone: string; label: string; full?: boolean }) {
   const digits = phone.replace(/[^0-9]/g, "")
   const href = `https://wa.me/${digits}`
   return (
@@ -22,7 +23,10 @@ function WhatsAppLinkButton({ phone, label }: { phone: string; label: string }) 
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="mt-1 inline-flex items-center gap-2 border border-green-600 bg-green-600 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-700"
+      className={cn(
+        "inline-flex items-center justify-center gap-2 border border-green-600 bg-green-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-700",
+        full && "w-full",
+      )}
     >
       <MessageCircle className="size-4" /> {label}
     </a>
@@ -68,6 +72,7 @@ export function CustomerChat() {
   const [open, setOpen] = useState(false)
   const [available, setAvailable] = useState(false)
   const [checked, setChecked] = useState(false)
+  const [whatsapp, setWhatsapp] = useState<string | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [busy, setBusy] = useState(false)
@@ -86,6 +91,10 @@ export function CustomerChat() {
     hi: locale === "bn"
       ? "আসসালামু আলাইকুম! আমি লিটল লুপের সহকারী। পণ্য খুঁজে দিতে পারি, ডেলিভারি চার্জ বলতে পারি, অর্ডারের অবস্থা দেখাতে পারি — কী জানতে চান?"
       : "Hello! I'm the Little Loop assistant. I can help you find products, check delivery charges, or track your order — what would you like to know?",
+    fallbackTitle: locale === "bn" ? "আমাদের সাথে যোগাযোগ করুন" : "Get in touch",
+    fallbackMsg: locale === "bn"
+      ? "আমাদের এআই সহকারী এখন সেট আপ হচ্ছে। এর মধ্যে আপনি হোয়াটসঅ্যাপে আমাদের সাথে কথা বলতে পারেন — আমরা দ্রুত উত্তর দেই!"
+      : "Our AI assistant is being set up. In the meantime, you can reach us on WhatsApp — we respond quickly!",
   }
 
   useEffect(() => {
@@ -97,6 +106,7 @@ export function CustomerChat() {
       setAvailable(res.configured)
       setChecked(true)
     }).catch(() => setChecked(true))
+    fetchShopSettings().then((s) => setWhatsapp(s?.whatsapp_number ?? null)).catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -143,7 +153,7 @@ export function CustomerChat() {
 
   return (
     <>
-      {!open && checked && available && (
+      {!open && checked && (
         <button
           onClick={() => setOpen(true)}
           aria-label={L.title}
@@ -165,7 +175,7 @@ export function CustomerChat() {
               </div>
               <div className="min-w-0 flex-1">
                 <SheetTitle className="text-sm font-extrabold uppercase tracking-widest text-foreground">
-                  {L.title}
+                  {available ? L.title : L.fallbackTitle}
                 </SheetTitle>
                 <p className="truncate text-xs text-muted-foreground">{L.subtitle}</p>
               </div>
@@ -181,83 +191,97 @@ export function CustomerChat() {
             </div>
           </SheetHeader>
 
-          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-            {messages.map((msg, i) => (
-              <div key={i} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
-                <div className="max-w-[92%]">
-                  <div
-                    className={cn(
-                      "px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap",
-                      msg.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "border border-border bg-card text-foreground"
-                    )}
-                  >
-                    {msg.text}
+          {available ? (
+            <>
+              <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                {messages.map((msg, i) => (
+                  <div key={i} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
+                    <div className="max-w-[92%]">
+                      <div
+                        className={cn(
+                          "px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap",
+                          msg.role === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "border border-border bg-card text-foreground"
+                        )}
+                      >
+                        {msg.text}
+                      </div>
+                      {msg.products && msg.products.length > 0 && <ProductCards products={msg.products} />}
+                      {msg.whatsapp && (
+                        <WhatsAppLinkButton phone={msg.whatsapp} label={L.whatsapp} />
+                      )}
+                    </div>
                   </div>
-                  {msg.products && msg.products.length > 0 && <ProductCards products={msg.products} />}
-                  {msg.whatsapp && (
-                    <WhatsAppLinkButton phone={msg.whatsapp} label={L.whatsapp} />
-                  )}
-                </div>
+                ))}
+
+                {busy && (
+                  <div className="flex justify-start">
+                    <div className="flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-sm text-muted-foreground">
+                      <LoaderCircle className="size-4 animate-spin" /> {L.working}
+                    </div>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="bg-destructive/10 px-3 py-2.5 text-sm text-destructive">{error}</div>
+                )}
+
+                <div ref={bottomRef} />
               </div>
-            ))}
 
-            {busy && (
-              <div className="flex justify-start">
-                <div className="flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-sm text-muted-foreground">
-                  <LoaderCircle className="size-4 animate-spin" /> {L.working}
+              {messages.length <= 1 && !busy && (
+                <div className="flex flex-wrap gap-2 px-4 pb-2">
+                  {suggested.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setInput(s)}
+                      className="border border-border bg-card px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-foreground/70 transition-colors hover:border-primary hover:text-primary"
+                    >
+                      {s}
+                    </button>
+                  ))}
                 </div>
+              )}
+
+              <form onSubmit={handleSend} className="border-t border-border bg-card p-3">
+                <div className="flex items-end gap-2">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault()
+                        void handleSend(e)
+                      }
+                    }}
+                    rows={1}
+                    placeholder={L.placeholder}
+                    className="max-h-32 min-h-11 flex-1 resize-none border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                  />
+                  <Button
+                    type="submit"
+                    size="icon"
+                    disabled={busy || !input.trim()}
+                    className="size-11 shrink-0 rounded-none"
+                    aria-label={locale === "bn" ? "পাঠান" : "Send"}
+                  >
+                    <Send className="size-4.5" />
+                  </Button>
+                </div>
+              </form>
+            </>
+          ) : (
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-8 text-center">
+              <div className="flex size-16 items-center justify-center rounded-full bg-primary/10">
+                <MessageCircle className="size-8 text-primary" />
               </div>
-            )}
-
-            {error && (
-              <div className="bg-destructive/10 px-3 py-2.5 text-sm text-destructive">{error}</div>
-            )}
-
-            <div ref={bottomRef} />
-          </div>
-
-          {messages.length <= 1 && !busy && (
-            <div className="flex flex-wrap gap-2 px-4 pb-2">
-              {suggested.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setInput(s)}
-                  className="border border-border bg-card px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-foreground/70 transition-colors hover:border-primary hover:text-primary"
-                >
-                  {s}
-                </button>
-              ))}
+              <p className="text-sm text-muted-foreground">{L.fallbackMsg}</p>
+              {whatsapp && (
+                <WhatsAppLinkButton phone={whatsapp} label={L.whatsapp} full />
+              )}
             </div>
           )}
-
-          <form onSubmit={handleSend} className="border-t border-border bg-card p-3">
-            <div className="flex items-end gap-2">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault()
-                    void handleSend(e)
-                  }
-                }}
-                rows={1}
-                placeholder={L.placeholder}
-                className="max-h-32 min-h-11 flex-1 resize-none border border-input bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-              />
-              <Button
-                type="submit"
-                size="icon"
-                disabled={busy || !input.trim()}
-                className="size-11 shrink-0 rounded-none"
-                aria-label={locale === "bn" ? "পাঠান" : "Send"}
-              >
-                <Send className="size-4.5" />
-              </Button>
-            </div>
-          </form>
         </SheetContent>
       </Sheet>
     </>
