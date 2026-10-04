@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { I18nProvider } from "@/lib/i18n"
 import { CartProvider } from "@/lib/cart"
+import { WishlistProvider } from "@/lib/wishlist"
 import { OwnerAuthProvider } from "@/lib/owner-auth"
 import { useRouter } from "@/lib/router"
 import { SiteHeader } from "@/components/site/site-header"
@@ -10,6 +11,7 @@ import { HomePage } from "@/pages/home"
 import { ShopPage, CategoryPage } from "@/pages/shop"
 import { ProductPage } from "@/pages/product"
 import { CartPage } from "@/pages/cart"
+import { WishlistPage } from "@/pages/wishlist"
 import { CheckoutPage } from "@/pages/checkout"
 import { TrackOrderPage } from "@/pages/track-order"
 import { OwnerLoginPage } from "@/pages/owner/login"
@@ -125,6 +127,9 @@ function AppRoutes() {
     case "/cart":
       page = <CartPage />
       break
+    case "/wishlist":
+      page = <WishlistPage />
+      break
     case "/checkout":
       page = <CheckoutPage />
       break
@@ -180,12 +185,14 @@ function WebMCPInjector() {
 function App() {
   return (
     <I18nProvider>
-      <CartProvider>
-        <OwnerAuthProvider>
-          <WebMCPInjector />
-          <AppRoutes />
-        </OwnerAuthProvider>
-      </CartProvider>
+      <WishlistProvider>
+        <CartProvider>
+          <OwnerAuthProvider>
+            <WebMCPInjector />
+            <AppRoutes />
+          </OwnerAuthProvider>
+        </CartProvider>
+      </WishlistProvider>
     </I18nProvider>
   )
 }

@@ -3,9 +3,9 @@ import { useI18n } from "@/lib/i18n"
 import { useCart } from "@/lib/cart"
 import { navigate } from "@/lib/router"
 import { Button } from "@/components/ui/button"
-import { createOrder, fetchShopSettings, formatPrice } from "@/lib/shop"
+import { createOrder, fetchShopSettings, formatPrice, validateCoupon } from "@/lib/shop"
 import type { ShopSettings } from "@/lib/supabase"
-import { CheckCircle2, ArrowRight } from "lucide-react"
+import { CheckCircle2, ArrowRight, TicketPercent, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function CheckoutPage() {
@@ -14,6 +14,10 @@ export function CheckoutPage() {
   const [settings, setSettings] = useState<ShopSettings | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<{ orderNumber: string } | null>(null)
+  const [couponInput, setCouponInput] = useState("")
+  const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null)
+  const [couponMsg, setCouponMsg] = useState<string | null>(null)
+  const [couponBusy, setCouponBusy] = useState(false)
 
   const [form, setForm] = useState({
     customer_name: "",
@@ -33,7 +37,31 @@ export function CheckoutPage() {
   const deliveryCharge = form.area_type === "inside_dhaka"
     ? (settings?.delivery_inside_dhaka ?? 60)
     : (settings?.delivery_outside_dhaka ?? 120)
-  const total = subtotal + deliveryCharge
+  const total = subtotal - (coupon?.discount ?? 0) + deliveryCharge
+
+  const applyCoupon = async () => {
+    const code = couponInput.trim()
+    if (!code || couponBusy) return
+    setCouponBusy(true)
+    setCouponMsg(null)
+    try {
+      const discount = await validateCoupon(code, subtotal)
+      setCoupon({ code: code.toUpperCase(), discount })
+      setCouponMsg(locale === "bn" ? "কুপন প্রয়োগ হয়েছে!" : "Coupon applied!")
+    } catch (err) {
+      setCoupon(null)
+      const msg = err instanceof Error ? err.message : ""
+      setCouponMsg(
+        msg.includes("min_subtotal")
+          ? (locale === "bn" ? "এই কুপনের জন্য ন্যূনতম অর্ডার প্রয়োজন" : "This coupon needs a higher order amount")
+          : msg.includes("expired")
+            ? (locale === "bn" ? "কুপনের মেয়াদ শেষ" : "This coupon has expired")
+            : (locale === "bn" ? "কুপন সঠিক নয়" : "Invalid coupon code")
+      )
+    } finally {
+      setCouponBusy(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,6 +83,7 @@ export function CheckoutPage() {
           delivery_charge: deliveryCharge,
           total,
           notes: form.notes || null,
+          coupon_code: coupon?.code ?? null,
         },
         items.map((i) => ({
           product_id: i.product_id,
@@ -268,12 +297,64 @@ export function CheckoutPage() {
             />
           </div>
 
+          {/* Coupon */}
+          <div className="border border-border p-4">
+            <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              {locale === "bn" ? "কুপন কোড" : "Coupon code"}
+            </label>
+            {coupon ? (
+              <div className="flex items-center justify-between border border-primary/40 bg-primary/5 px-3 py-2.5">
+                <span className="flex items-center gap-2 text-sm font-bold text-primary">
+                  <TicketPercent className="size-4" /> {coupon.code}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => { setCoupon(null); setCouponMsg(null); setCouponInput("") }}
+                  aria-label="Remove coupon"
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                  placeholder={locale === "bn" ? "যেমন: EID10" : "e.g. EID10"}
+                  className="h-11 flex-1 border border-border bg-background px-4 text-sm uppercase text-foreground placeholder:normal-case placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!couponInput.trim() || couponBusy}
+                  onClick={applyCoupon}
+                  className="min-h-11 text-xs font-bold uppercase tracking-wider"
+                >
+                  {locale === "bn" ? "প্রয়োগ" : "Apply"}
+                </Button>
+              </div>
+            )}
+            {couponMsg && (
+              <p className={cn("mt-2 text-xs", coupon ? "text-primary" : "text-destructive")}>{couponMsg}</p>
+            )}
+          </div>
+
           {/* Summary */}
           <div className="border border-border p-4">
             <div className="flex justify-between text-sm">
               <span className="uppercase text-muted-foreground">{t("subtotal")}</span>
               <span className="font-bold">{formatPrice(subtotal, locale)}</span>
             </div>
+            {coupon && (
+              <div className="mt-2 flex justify-between text-sm">
+                <span className="uppercase text-muted-foreground">
+                  {locale === "bn" ? "ছাড়" : "Discount"} ({coupon.code})
+                </span>
+                <span className="font-bold text-primary">-{formatPrice(coupon.discount, locale)}</span>
+              </div>
+            )}
             <div className="mt-2 flex justify-between text-sm">
               <span className="uppercase text-muted-foreground">{t("deliveryCharge")}</span>
               <span className="font-bold">{formatPrice(deliveryCharge, locale)}</span>

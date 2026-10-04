@@ -7,6 +7,7 @@ import { ProductGrid } from "@/components/site/product-card"
 import { ServicePromises } from "@/components/site/service-promises"
 import { ArrowRight } from "lucide-react"
 import { fetchProducts, fetchCategories, fetchShopSettings } from "@/lib/shop"
+import { setSeo } from "@/lib/seo"
 import type { Product, Category, ShopSettings } from "@/lib/supabase"
 
 export function HomePage() {
@@ -37,6 +38,16 @@ export function HomePage() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    setSeo({
+      title: settings
+        ? `${settings.shop_name} — Kids & Family Fashion`
+        : "Little Loop by Princess — Kids & Family Fashion",
+      description: settings?.hero_subtitle ?? "Playful clothes for every little adventure",
+      image: "/kids-hero.webp",
+    })
+  }, [settings])
 
   const heroTitle = locale === "bn" && settings?.hero_title_bn
     ? settings.hero_title_bn

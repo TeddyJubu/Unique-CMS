@@ -1,4 +1,5 @@
 import { supabase, type Product, type Category, type Order, type ShopSettings } from "@/lib/supabase"
+import { cached, invalidateCache } from "@/lib/cache"
 
 export function formatPrice(amount: number, locale: "en" | "bn" = "en"): string {
   if (amount === 0) return locale === "bn" ? "মূল্য জানতে যোগাযোগ করুন" : "Price on request"
@@ -129,9 +130,11 @@ const SETTINGS_COLUMNS =
   "id, shop_name, shop_name_bn, whatsapp_number, bkash_number, delivery_inside_dhaka, delivery_outside_dhaka, hero_title, hero_title_bn, hero_subtitle, hero_subtitle_bn, ai_api_url, ai_model"
 
 export async function fetchCategories(): Promise<Category[]> {
-  const { data, error } = await supabase.from("categories").select("*").order("sort_order", { ascending: true })
-  if (error) return demoCategories
-  return data as Category[]
+  return cached("categories", async () => {
+    const { data, error } = await supabase.from("categories").select("*").order("sort_order", { ascending: true })
+    if (error) return demoCategories
+    return data as Category[]
+  })
 }
 
 export async function fetchProducts(filters?: {
@@ -144,7 +147,13 @@ export async function fetchProducts(filters?: {
   maxPrice?: number
   sort?: "newest" | "price_low" | "price_high"
 }): Promise<Product[]> {
-  let query = supabase
+  const cacheKey = `products:${JSON.stringify({
+    c: filters?.categoryId, f: filters?.featured, s: filters?.search, sort: filters?.sort,
+    min: filters?.minPrice, max: filters?.maxPrice,
+  })}`
+
+  return cached(cacheKey, async () => {
+    let query = supabase
     .from("products")
     .select("*, product_images(*), category(*)")
     .eq("is_active", true)
@@ -185,44 +194,49 @@ export async function fetchProducts(filters?: {
     return products
   }
 
-  let products = data as Product[]
+    let products = data as Product[]
 
-  if (filters?.sizes && filters.sizes.length > 0) {
-    products = products.filter((p) => p.sizes.some((s) => filters.sizes!.includes(s)))
-  }
-  if (filters?.colors && filters.colors.length > 0) {
-    products = products.filter((p) => p.colors.some((c) => filters.colors!.includes(c)))
-  }
+    if (filters?.sizes && filters.sizes.length > 0) {
+      products = products.filter((p) => p.sizes.some((s) => filters.sizes!.includes(s)))
+    }
+    if (filters?.colors && filters.colors.length > 0) {
+      products = products.filter((p) => p.colors.some((c) => filters.colors!.includes(c)))
+    }
 
-  products = products.map((p) => ({
-    ...p,
-    product_images: p.product_images?.sort((a, b) => a.sort_order - b.sort_order),
-  }))
+    products = products.map((p) => ({
+      ...p,
+      product_images: p.product_images?.sort((a, b) => a.sort_order - b.sort_order),
+    }))
 
-  return products
+    return products
+  })
 }
 
 export async function fetchProduct(id: string): Promise<Product | null> {
-  const { data, error } = await supabase
+  return cached(`product:${id}`, async () => {
+    const { data, error } = await supabase
     .from("products")
     .select("*, product_images(*), category(*)")
     .eq("id", id)
     .maybeSingle()
   if (error) return productCatalog.find((p) => p.id === id) ?? null
   if (!data) return productCatalog.find((p) => p.id === id) ?? null
-  const product = data as Product
-  product.product_images?.sort((a, b) => a.sort_order - b.sort_order)
-  return product
+    const product = data as Product
+    product.product_images?.sort((a, b) => a.sort_order - b.sort_order)
+    return product
+  })
 }
 
 export async function fetchShopSettings(): Promise<ShopSettings | null> {
-  const { data, error } = await supabase
-    .from("shop_settings")
-    .select(SETTINGS_COLUMNS)
-    .limit(1)
-    .maybeSingle()
-  if (error) return demoSettings
-  return data as unknown as ShopSettings
+  return cached("settings", async () => {
+    const { data, error } = await supabase
+      .from("shop_settings")
+      .select(SETTINGS_COLUMNS)
+      .limit(1)
+      .maybeSingle()
+    if (error) return demoSettings
+    return data as unknown as ShopSettings
+  })
 }
 
 export async function verifyOwnerLogin(phone: string, pin: string): Promise<boolean> {
@@ -261,6 +275,15 @@ export async function fetchAllOrders(creds: OwnerCredentials, limit?: number): P
   return (data ?? []) as Order[]
 }
 
+export async function validateCoupon(code: string, subtotal: number): Promise<number> {
+  const { data, error } = await supabase.rpc("validate_coupon", { p_code: code, p_subtotal: subtotal })
+  if (error) {
+    const msg = (error as { message?: string }).message ?? ""
+    throw new Error(msg)
+  }
+  return Number(data)
+}
+
 export async function createOrder(
   order: {
     customer_name: string
@@ -274,6 +297,7 @@ export async function createOrder(
     delivery_charge: number
     total: number
     notes: string | null
+    coupon_code: string | null
   },
   items: {
     product_id: string | null
@@ -297,6 +321,7 @@ export async function createOrder(
       bkash_trx_id: order.bkash_trx_id,
       notes: order.notes,
     },
+    p_coupon: order.coupon_code,
     p_items: items.map((i) => ({
       product_id: i.product_id,
       size: i.size,
@@ -360,6 +385,8 @@ export async function createProduct(
     p_images: imageUrls.filter((url) => url.trim()).map((url) => url.trim()),
   })
   if (error) throw new Error("save_failed")
+  invalidateCache("product")
+  invalidateCache("products")
   return data as Product
 }
 
@@ -389,6 +416,8 @@ export async function updateProduct(
     p_images: imageUrls.filter((url) => url.trim()).map((url) => url.trim()),
   })
   if (error) throw new Error("save_failed")
+  invalidateCache("product")
+  invalidateCache("products")
 }
 
 export async function deleteProduct(creds: OwnerCredentials, productId: string): Promise<void> {
@@ -398,6 +427,8 @@ export async function deleteProduct(creds: OwnerCredentials, productId: string):
     p_product_id: productId,
   })
   if (error) throw new Error("delete_failed")
+  invalidateCache("product")
+  invalidateCache("products")
 }
 
 export async function updateShopSettings(

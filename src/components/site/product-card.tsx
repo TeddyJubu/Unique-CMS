@@ -5,11 +5,13 @@ import { cn } from "@/lib/utils"
 import { useI18n } from "@/lib/i18n"
 import { formatPrice } from "@/lib/shop"
 import { navigate } from "@/lib/router"
+import { useWishlist } from "@/lib/wishlist"
 import type { Product } from "@/lib/supabase"
 import { getProductImageUrl } from "@/lib/shop"
 
 export function ProductCard({ product }: { product: Product }) {
   const { locale, t } = useI18n()
+  const { has, toggle } = useWishlist()
   const imageUrl = getProductImageUrl(product)
   const hasDiscount = product.compare_price && product.compare_price > product.price
   const discountPct = hasDiscount
@@ -36,11 +38,17 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         <button
-          className="absolute left-3 top-3 text-foreground/50 transition-colors hover:text-primary"
-          onClick={(e) => e.stopPropagation()}
-          aria-label="Add to wishlist"
+          className={cn(
+            "absolute left-3 top-3 transition-colors",
+            has(product.id) ? "text-primary" : "text-foreground/50 hover:text-primary"
+          )}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggle(product)
+          }}
+          aria-label={has(product.id) ? "Remove from wishlist" : "Add to wishlist"}
         >
-          <Heart className="size-5" />
+          <Heart className={cn("size-5", has(product.id) && "fill-current")} />
         </button>
         {hasDiscount && (
           <Badge className="absolute right-3 top-3 bg-primary px-2 py-1 text-[10px] font-bold uppercase text-primary-foreground">

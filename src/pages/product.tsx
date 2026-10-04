@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ProductGrid } from "@/components/site/product-card"
 import { fetchProduct, fetchProducts, formatPrice, getWhatsAppOrderMessage } from "@/lib/shop"
+import { setSeo } from "@/lib/seo"
 import { useCart } from "@/lib/cart"
 import { fetchShopSettings } from "@/lib/shop"
 import type { Product, ShopSettings } from "@/lib/supabase"
@@ -50,6 +51,17 @@ export function ProductPage() {
     }
     if (productId) load()
   }, [productId])
+
+  useEffect(() => {
+    if (product) {
+      setSeo({
+        title: `${product.name} — Little Loop by Princess`,
+        description: product.description ?? undefined,
+        image: product.product_images?.[0]?.image_url ?? null,
+        type: "product",
+      })
+    }
+  }, [product])
 
   const handleAddToCart = () => {
     if (!product) return
