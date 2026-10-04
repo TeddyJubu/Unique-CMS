@@ -148,6 +148,24 @@
   font-family: var(--font-heading);
 }
 
+/* Headings and labels render in capital case, not all caps */
+.site-shell h1,
+.site-shell h2,
+.site-shell h3,
+.site-shell h4,
+.site-shell h5,
+.site-shell h6,
+.site-shell nav a,
+.site-shell nav button,
+.site-shell button,
+.site-shell label,
+.site-shell .font-bold.uppercase,
+.site-shell .font-medium.uppercase,
+.site-shell .font-extrabold.uppercase {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 /* ============================================================
    CMS LIGHT THEME — soft, friendly, high-contrast for elders
    Applied when .cms-light wraps owner pages
