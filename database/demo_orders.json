@@ -1,0 +1,176 @@
+[
+  {
+    "order_number": "UCP-DEMO-001",
+    "customer_name": "Fatema Rahman",
+    "customer_phone": "+8801811000001",
+    "customer_email": null,
+    "customer_address": "House 12, Road 5, Dhanmondi",
+    "district": "Dhaka",
+    "area_type": "inside_dhaka",
+    "payment_method": "cod",
+    "bkash_trx_id": null,
+    "subtotal": 4500,
+    "discount": 0,
+    "delivery_charge": 60,
+    "total": 4560,
+    "coupon_code": null,
+    "notes": "Please deliver after 5pm",
+    "status": "pending",
+    "payment_status": "pending",
+    "created_at": "2026-10-03T15:54:45.046926+00:00",
+    "items": [
+      {
+        "product_name": "Red Silk Saree",
+        "size": "Free",
+        "color": "Red",
+        "quantity": 1,
+        "price": 4500
+      }
+    ]
+  },
+  {
+    "order_number": "UCP-DEMO-002",
+    "customer_name": "Karim Uddin",
+    "customer_phone": "+8801811000002",
+    "customer_email": null,
+    "customer_address": "Flat B4, Lalmatia Apartment, Mohammadpur",
+    "district": "Dhaka",
+    "area_type": "inside_dhaka",
+    "payment_method": "bkash",
+    "bkash_trx_id": null,
+    "subtotal": 1800,
+    "discount": 0,
+    "delivery_charge": 60,
+    "total": 1860,
+    "coupon_code": null,
+    "notes": null,
+    "status": "pending",
+    "payment_status": "pending",
+    "created_at": "2026-10-03T12:54:45.046926+00:00",
+    "items": [
+      {
+        "product_name": "White Embroidered Panjabi",
+        "size": "L",
+        "color": "White",
+        "quantity": 1,
+        "price": 1800
+      }
+    ]
+  },
+  {
+    "order_number": "UCP-DEMO-003",
+    "customer_name": "Nusrat Jahan",
+    "customer_phone": "+8801811000003",
+    "customer_email": null,
+    "customer_address": "Village: Rampur, Post: Sadar",
+    "district": "Chittagong",
+    "area_type": "outside_dhaka",
+    "payment_method": "cod",
+    "bkash_trx_id": null,
+    "subtotal": 2800,
+    "discount": 0,
+    "delivery_charge": 120,
+    "total": 2920,
+    "coupon_code": null,
+    "notes": "Call before delivery",
+    "status": "confirmed",
+    "payment_status": "pending",
+    "created_at": "2026-10-02T17:54:45.046926+00:00",
+    "items": [
+      {
+        "product_name": "Navy Three-Piece",
+        "size": "M",
+        "color": "Navy",
+        "quantity": 1,
+        "price": 2800
+      }
+    ]
+  },
+  {
+    "order_number": "UCP-DEMO-004",
+    "customer_name": "Sabbir Ahmed",
+    "customer_phone": "+8801811000004",
+    "customer_email": null,
+    "customer_address": "Sector 7, Road 12, Uttara",
+    "district": "Dhaka",
+    "area_type": "inside_dhaka",
+    "payment_method": "bkash",
+    "bkash_trx_id": null,
+    "subtotal": 1500,
+    "discount": 0,
+    "delivery_charge": 60,
+    "total": 1560,
+    "coupon_code": null,
+    "notes": null,
+    "status": "shipped",
+    "payment_status": "paid",
+    "created_at": "2026-10-01T17:54:45.046926+00:00",
+    "items": [
+      {
+        "product_name": "Emerald Green Kurti",
+        "size": "M",
+        "color": "Green",
+        "quantity": 1,
+        "price": 1500
+      }
+    ]
+  },
+  {
+    "order_number": "UCP-DEMO-005",
+    "customer_name": "Ayesha Siddika",
+    "customer_phone": "+8801811000005",
+    "customer_email": null,
+    "customer_address": "Cantonment Area, Box Culvert Road",
+    "district": "Sylhet",
+    "area_type": "outside_dhaka",
+    "payment_method": "cod",
+    "bkash_trx_id": null,
+    "subtotal": 3800,
+    "discount": 0,
+    "delivery_charge": 120,
+    "total": 3920,
+    "coupon_code": null,
+    "notes": "Great service!",
+    "status": "delivered",
+    "payment_status": "paid",
+    "created_at": "2026-09-28T17:54:45.046926+00:00",
+    "items": [
+      {
+        "product_name": "Maroon Silk Saree",
+        "size": "Free",
+        "color": "Maroon",
+        "quantity": 1,
+        "price": 3800
+      }
+    ]
+  },
+  {
+    "order_number": "UCP-DEMO-006",
+    "customer_name": "Rahim Mia",
+    "customer_phone": "+8801811000006",
+    "customer_email": null,
+    "customer_address": "Station Road, Sadar",
+    "district": "Rajshahi",
+    "area_type": "outside_dhaka",
+    "payment_method": "cod",
+    "bkash_trx_id": null,
+    "subtotal": 1200,
+    "discount": 0,
+    "delivery_charge": 120,
+    "total": 1320,
+    "coupon_code": null,
+    "notes": "Customer changed mind",
+    "status": "cancelled",
+    "payment_status": "pending",
+    "created_at": "2026-09-30T17:54:45.046926+00:00",
+    "items": [
+      {
+        "product_name": "Kids Festive Set",
+        "size": "4Y",
+        "color": "Yellow",
+        "quantity": 1,
+        "price": 1200
+      }
+    ]
+  }
+]

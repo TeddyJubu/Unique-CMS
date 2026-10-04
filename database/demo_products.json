@@ -1,0 +1,2457 @@
+[
+  {
+    "id": "6d8f441e-9e99-4879-a46d-e9832d2488e0",
+    "name": "Red Silk Saree",
+    "price": 4500,
+    "sizes": [
+      "Free Size"
+    ],
+    "stock": 15,
+    "colors": [
+      "Red",
+      "Maroon"
+    ],
+    "images": [
+      {
+        "image_url": "/saree-red.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "লাল সিল্ক শাড়ি",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Premium red silk saree with intricate gold border. Perfect for weddings and special occasions.",
+    "is_featured": true,
+    "compare_price": 6000,
+    "description_bn": "সোনালী বর্ডর সহ প্রিমিয়াম লাল সিল্ক শাড়ি। বিয়ে ও বিশেষ অনুষ্ঠানের জন্য পারফেক্ট।"
+  },
+  {
+    "id": "bf2100e0-4369-4a88-b1b2-c32d3f88c047",
+    "name": "Maroon Silk Saree",
+    "price": 3800,
+    "sizes": [
+      "Free Size"
+    ],
+    "stock": 8,
+    "colors": [
+      "Maroon"
+    ],
+    "images": [
+      {
+        "image_url": "/saree-maroon.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "মারুন সিল্ক শাড়ি",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Elegant maroon silk saree with traditional gold zari border.",
+    "is_featured": true,
+    "compare_price": null,
+    "description_bn": "ঐতিহ্যবাহী সোনালী জারি বর্ডর সহ মারুন সিল্ক শাড়ি।"
+  },
+  {
+    "id": "5b33880a-b0ca-4cac-b293-d514f514ace7",
+    "name": "Navy Three-Piece",
+    "price": 2800,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "stock": 20,
+    "colors": [
+      "Navy",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/three-piece-navy.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "নেভি থ্রি-পিস",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Premium navy blue three-piece salwar kameez with dupatta. Elegant design for everyday wear.",
+    "is_featured": true,
+    "compare_price": 3500,
+    "description_bn": "দুপাটা সহ প্রিমিয়াম নেভি ব্লু থ্রি-পিস সালোয়ার কামিজ। প্রতিদিনের পরিধানের জন্য দুর্দান্ত ডিজাইন।"
+  },
+  {
+    "id": "8e6e98a0-6e3e-4e23-a740-0c32cf937627",
+    "name": "White Embroidered Panjabi",
+    "price": 1800,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "stock": 25,
+    "colors": [
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/panjabi-white.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "সাদা এমব্রয়ডারি পাঞ্জাবি",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Classic white panjabi with subtle embroidery. Comfortable cotton fabric.",
+    "is_featured": true,
+    "compare_price": 2200,
+    "description_bn": "সূক্ষ্ম এমব্রয়ডারি সহ ক্লাসিক সাদা পাঞ্জাবি। আরামদায়ক সুতির কাপড়।"
+  },
+  {
+    "id": "bb88364d-e154-4114-a635-b5e5e4425146",
+    "name": "Beige Cotton Panjabi",
+    "price": 1200,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "stock": 30,
+    "colors": [
+      "Beige"
+    ],
+    "images": [
+      {
+        "image_url": "/panjabi-beige.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "বেজ সুতির পাঞ্জাবি",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Minimal beige cotton panjabi for everyday comfort. Breathable fabric perfect for Bangladesh weather.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "প্রতিদিনের আরামের জন্য মিনিমাল বেজ সুতির পাঞ্জাবি। বাংলাদেশের আবহাওয়ার জন্য শ্বাসযোগ্য কাপড়।"
+  },
+  {
+    "id": "9cc4ef22-7b76-456c-abfd-44b9cb056a1a",
+    "name": "Emerald Green Kurti",
+    "price": 1500,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "stock": 18,
+    "colors": [
+      "Green"
+    ],
+    "images": [
+      {
+        "image_url": "/kurti-green.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "এমারল্ড গ্রিন কুর্তি",
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Stylish emerald green kurti with modern cut. Perfect for casual and semi-formal occasions.",
+    "is_featured": true,
+    "compare_price": 2000,
+    "description_bn": "আধুনিক কাট সহ স্টাইলিশ এমারল্ড গ্রিন কুর্তি। ক্যাজুয়াল ও সেমি-ফর্মাল অনুষ্ঠানের জন্য পারফেক্ট।"
+  },
+  {
+    "id": "86c9e223-bc2c-44f9-b483-3384750965b9",
+    "name": "Kids Festive Set",
+    "price": 1200,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "stock": 12,
+    "colors": [
+      "Red",
+      "Green"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-festive.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "বাচ্চাদের ফেস্টিভ সেট",
+    "category": "Eid Collection",
+    "is_active": true,
+    "description": "Festive traditional outfit for kids. Comfortable and stylish for Eid celebrations.",
+    "is_featured": true,
+    "compare_price": 1500,
+    "description_bn": "বাচ্চাদের জন্য ফেস্টিভ ঐতিহ্যবাহী পোশাক। ঈদ উদযাপনের জন্য আরামদায়ক এবং স্টাইলিশ।"
+  },
+  {
+    "id": "ac804873-4f8b-4c57-b16f-255f700e6ce3",
+    "name": "Golden Eid Sherwani",
+    "price": 8500,
+    "sizes": [
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "stock": 5,
+    "colors": [
+      "Beige",
+      "Brown"
+    ],
+    "images": [
+      {
+        "image_url": "/eid-golden.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "গোল্ডেন ঈদ শেরওয়ানি",
+    "category": "Everyday",
+    "is_active": true,
+    "description": "Luxurious golden embroidered sherwani for Eid. Premium fabric with intricate detailing.",
+    "is_featured": true,
+    "compare_price": 10000,
+    "description_bn": "ঈদের জন্য বিলাসবহুল গোল্ডেন এমব্রয়ডারি শেরওয়ানি। জটিল ডিটেইলিং সহ প্রিমিয়াম ফ্যাব্রিক।"
+  },
+  {
+    "id": "1acbc8de-7abd-45a1-94c7-e7654725c2ba",
+    "name": "Garden Play Set",
+    "price": 990,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y"
+    ],
+    "stock": 9,
+    "colors": [
+      "Green",
+      "Pink"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "গার্ডেন প্লে সেট",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1250,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "7efb7b00-72b0-478b-9f4f-8120723a85bb",
+    "name": "Classic Cream Panjabi",
+    "price": 1450,
+    "sizes": [
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Cream",
+      "Brown"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ক্লাসিক ক্রিম পাঞ্জাবি",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1750,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "00ea74f1-60e3-49be-8113-5dc8178dba58",
+    "name": "Denim Doodle Jacket",
+    "price": 1850,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 11,
+    "colors": [
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-denim-jacket.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ডেনিম ডুডল জ্যাকেট",
+    "category": "Everyday",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 2200,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "a47a0693-a9ba-41a1-8e31-69c26a67ae4c",
+    "name": "Velvet Rose Frock",
+    "price": 2200,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 12,
+    "colors": [
+      "Red",
+      "Rose"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ভেলভেট রোজ ফ্রক",
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 2700,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "5e298e95-119a-47e7-ac40-742e3f5085f9",
+    "name": "Soft Sun T-shirt",
+    "price": 650,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 13,
+    "colors": [
+      "Yellow",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "সফট সান টি-শার্ট",
+    "category": "Everyday",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 800,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "c86de16b-2296-4da6-a578-e9daa0b60147",
+    "name": "Sunny Cotton Shirt",
+    "price": 850,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y"
+    ],
+    "stock": 14,
+    "colors": [
+      "Yellow",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "সানি কটন শার্ট",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1100,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "ef97ff22-6e10-40b5-b780-c392f9c1e524",
+    "name": "Little Prince Sherwani",
+    "price": 3200,
+    "sizes": [
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 15,
+    "colors": [
+      "Mint",
+      "Gold"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "লিটল প্রিন্স শেরওয়ানি",
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 3800,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "4ad1cdbb-5903-4152-97b6-8bc75957b32d",
+    "name": "Cotton Candy Skirt Set",
+    "price": 1150,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 16,
+    "colors": [
+      "Pink",
+      "Teal"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "কটন ক্যান্ডি স্কার্ট সেট",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1400,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "fe72083e-a37a-419a-8f1e-88b449239c26",
+    "name": "Petal Party Frock",
+    "price": 1650,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 17,
+    "colors": [
+      "Pink",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "পেটাল পার্টি ফ্রক",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 2100,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "8affd0b7-dcba-4d81-845d-20bbda30b884",
+    "name": "Comfy Cloud Jogger Set",
+    "price": 1050,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 18,
+    "colors": [
+      "Grey",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-denim-jacket.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "কমফি ক্লাউড জগার সেট",
+    "category": "Everyday",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "11f171ca-46c4-4977-a940-593963a36cee",
+    "name": "Denim Day Jacket",
+    "price": 1850,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 19,
+    "colors": [
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-denim-jacket.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ডেনিম ডে জ্যাকেট",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "864e138a-953d-4006-bff9-4482e13aae12",
+    "name": "Little Gentleman Set",
+    "price": 1350,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 20,
+    "colors": [
+      "Navy",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "লিটল জেন্টলম্যান সেট",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1650,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "9126d856-e6b1-4b36-bc4d-2c0b2f8968dd",
+    "name": "Mango Summer Dress",
+    "price": 1050,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y"
+    ],
+    "stock": 21,
+    "colors": [
+      "Yellow",
+      "Green"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ম্যাঙ্গো সামার ড্রেস",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "fbb8da81-b6a6-4150-84e3-76fbf226b7cc",
+    "name": "Playground Polo",
+    "price": 750,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 22,
+    "colors": [
+      "Green",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "প্লেগ্রাউন্ড পোলো",
+    "category": "Everyday",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 900,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "05091481-c784-4974-8244-740e991b7b8f",
+    "name": "Rainbow Day Dress",
+    "price": 1250,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 23,
+    "colors": [
+      "Rainbow",
+      "Yellow"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "রেইনবো ডে ড্রেস",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 1500,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "ed74c512-296b-43a2-8f3e-d8153b4a4a42",
+    "name": "Tiny Trendsetter Set",
+    "price": 1450,
+    "sizes": [
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 24,
+    "colors": [
+      "Navy",
+      "Beige"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-denim-jacket.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "টিনি ট্রেন্ডসেটার সেট",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "4b6f8a8a-57d9-4b96-96ab-f192098d8140",
+    "name": "Crescent Panjabi Set",
+    "price": 2250,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 25,
+    "colors": [
+      "Blue",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ক্রিসেন্ট পাঞ্জাবি সেট",
+    "category": "Eid Collection",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 2700,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "9e217fa7-3baf-4213-8ecd-5498b488f139",
+    "name": "Pink Gold Lehenga",
+    "price": 2850,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 8,
+    "colors": [
+      "Pink",
+      "Gold"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "পিংক গোল্ড লেহেঙ্গা",
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 3400,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "642ab290-02fc-4014-b3a8-9003ca1bc1a8",
+    "name": "Royal Blue Panjabi",
+    "price": 1550,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 9,
+    "colors": [
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "রয়্যাল ব্লু পাঞ্জাবি",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 1900,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "2a5f522c-5f23-46e9-b1bd-d513ecfa445b",
+    "name": "Butterfly Celebration Dress",
+    "price": 1950,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Rainbow",
+      "Pink"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "বাটারফ্লাই সেলিব্রেশন ড্রেস",
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 2350,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "9b24340b-d426-483a-9339-45d087fd2126",
+    "name": "Ocean Breeze Set",
+    "price": 1350,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 11,
+    "colors": [
+      "Blue",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ওশান ব্রিজ সেট",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1600,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "45de36e5-a101-4803-ba26-fa656a74ae1c",
+    "name": "Moonlight Party Set",
+    "price": 2450,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 12,
+    "colors": [
+      "Lavender",
+      "Silver"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "মুনলাইট পার্টি সেট",
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "ebc1dd7f-9f61-4403-b5b7-55a42ecdee1b",
+    "name": "Coral Bloom Frock",
+    "price": 1450,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 13,
+    "colors": [
+      "Coral",
+      "Pink"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "কোরাল ব্লুম ফ্রক",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 1800,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "f73d377c-fc64-4329-b99b-b2103e5b84c4",
+    "name": "Eid Joy Frock",
+    "price": 2100,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 14,
+    "colors": [
+      "Pink",
+      "Gold"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "ঈদ জয় ফ্রক",
+    "category": "Eid Collection",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 2550,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "2d002c16-6235-487d-833c-07d0dba5b0aa",
+    "name": "Mint Eid Kurta",
+    "price": 1750,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y"
+    ],
+    "stock": 15,
+    "colors": [
+      "Mint",
+      "White"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "মিন্ট ঈদ কুর্তা",
+    "category": "Boys",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 2200,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "75b96440-4db4-4843-8914-089ccea5be9e",
+    "name": "Mint Moon Eid Kurta",
+    "price": 1750,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 16,
+    "colors": [
+      "Mint"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "মিন্ট মুন ঈদ কুর্তা",
+    "category": "Eid Collection",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 2100,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "7dd82f20-6137-43d1-9303-67627abc2060",
+    "name": "Color Pop Co-ord",
+    "price": 1200,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 17,
+    "colors": [
+      "Teal",
+      "Yellow"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "কালার পপ কো-অর্ড",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": true,
+    "compare_price": 1500,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "ef28f57d-0dcd-40c9-9bd3-b4b9f004d268",
+    "name": "Little Star Tunic",
+    "price": 950,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y"
+    ],
+    "stock": 18,
+    "colors": [
+      "Blue",
+      "Yellow"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "লিটল স্টার টিউনিক",
+    "category": "Girls",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "371303cc-9d39-4dc3-9ddb-5d67359684c6",
+    "name": "Mini Explorer Set",
+    "price": 1100,
+    "sizes": [
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 19,
+    "colors": [
+      "Blue",
+      "Cream"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-denim-jacket.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "মিনি এক্সপ্লোরার সেট",
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "a3a418f9-0cf9-42e9-969b-77909c233204",
+    "name": "Cozy Weekend Dress",
+    "price": 950,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y"
+    ],
+    "stock": 20,
+    "colors": [
+      "Coral",
+      "Yellow"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": "কোজি উইকেন্ড ড্রেস",
+    "category": "Everyday",
+    "is_active": true,
+    "description": "Comfortable, playful and made for little adventures.",
+    "is_featured": false,
+    "compare_price": 1150,
+    "description_bn": "ছোট্ট অ্যাডভেঞ্চারের জন্য আরামদায়ক ও আনন্দময় পোশাক।"
+  },
+  {
+    "id": "22b83907-480b-497f-94db-876a6eab46e2",
+    "name": "80s Queen",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "cbd982f6-543d-4b43-93c3-2bec4d4ebd6f",
+    "name": "Premium party-dress collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "4a2f973a-4775-4512-8ee5-843555f37e91",
+    "name": "Most demanding Kabli set",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "238f1d24-efd1-463e-a47c-21145da42c74",
+    "name": "Stock-clearance outfit",
+    "price": 600,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "9fc05160-d98b-4429-8ecc-6d74e82eb13f",
+    "name": "Floral Kabli",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "2df97df1-5ddc-40b3-a397-31557ae32750",
+    "name": "Cotton gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "b57c21fb-9a7f-4a75-a89c-0dd04abe76a9",
+    "name": "Pakistani-inspired outfit (two colors)",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "cd32a505-b933-4b3d-bfd4-3bde39c88a50",
+    "name": "New trendy frock",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "1311cc9d-b9ac-4af3-ae41-43eedd75c625",
+    "name": "Cute linen gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "9b10e5b5-a273-4389-9f80-9acac6c242e1",
+    "name": "Party-dress collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "6d87e767-890b-4d6b-b4f4-d38e68d904ba",
+    "name": "New frock",
+    "price": 1000,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "3957a476-e463-4c4d-ba23-505329f0d874",
+    "name": "Party collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "b4a0a714-960e-473a-9be1-e68765ac2997",
+    "name": "Noyontara gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "b0ef7fdf-3714-4a0a-91bb-8b7e883ee0ee",
+    "name": "Linen gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "ea203b9e-36c4-4cac-9dea-3f76139ff72d",
+    "name": "Western dress",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "0c243a61-827d-450f-97b8-c6562016e76e",
+    "name": "Most comfortable gharara collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "bf678f9d-050c-4537-8287-95c3d59e7248",
+    "name": "Sherwani gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "747acd4b-9017-4b0a-ab9c-055e719852a3",
+    "name": "Wedding collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "b4bb9985-a203-4849-ac44-4cc2aa8657e1",
+    "name": "Cherry Kabli",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "3165786a-9029-43c9-92f1-6bddfe963658",
+    "name": "Burj Khalifa design",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "80918c75-5896-4250-91cf-af935de48cab",
+    "name": "Viral Kabli set",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "6dbf93ea-bf1c-48f2-ad22-25697d6a4559",
+    "name": "Children’s clothing album + free delivery",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "c18457d4-31ea-4f27-8c78-4a9ce4f1bf86",
+    "name": "Premium lehenga collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "0087c2e5-d6c0-4538-913f-b7ac24ff957b",
+    "name": "Soft summer collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "0762b9b4-07e9-4221-b397-526c74486f9a",
+    "name": "Cotton baby frock",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "6be59de2-1777-4ad3-bd6e-e2bcf523349a",
+    "name": "Most-demanded Kabli set",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "12c572c2-12d0-4de3-9784-9fcccfc34ba3",
+    "name": "Jimichu Kabli",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "0419049d-58b3-487e-ac92-7ab7247e919f",
+    "name": "Comfort + style collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Matching Sets",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "4eabafd8-d263-49b0-b978-144bf2bb1421",
+    "name": "Eye-soothing gown",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "3c2f3bf9-83d1-4611-83e0-5b972a64de40",
+    "name": "Premium lehenga set",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "d3b518f7-e2bd-4252-a026-fdd1915817f2",
+    "name": "Cute Kabli set",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-boy-panjabi.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "6e758fd3-ebcc-4c89-a356-42868344a57a",
+    "name": "Cute skirt set (3 colors)",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-printed-set.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "0ecf3c3a-f44f-4d9a-892a-58813d441b04",
+    "name": "Day-out frock collection",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "fd07862d-abe2-410a-bc9c-727164bc6bb0",
+    "name": "Pakistani-inspired Kabli",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-eid-kurta.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Boys",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "7d7ba623-2fe1-4626-b83b-7abf7643d8a8",
+    "name": "Jimichu Pari frock",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "f814e556-fab1-4f00-a97f-fef2d981ce1c",
+    "name": "Naira-cut cotton gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "607b9d08-bb95-42b5-b6bc-ae59dc9036e8",
+    "name": "Rose gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "4f659e5b-f486-43ef-9021-b417df91b699",
+    "name": "Gharara featured in review post",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "47e83db8-9d31-4496-97d7-51b425099ebb",
+    "name": "Budget gown / frock",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-frock.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "b02d41eb-0164-4478-8c70-08e4bea6add2",
+    "name": "Barbie frock",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-rainbow-dress.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "2d63157d-e0dd-4054-ac8e-a7e53d84566b",
+    "name": "Cotton Naira-cut outfit",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "085cf1f5-3361-4cff-bfdd-5514ff05d655",
+    "name": "Best-selling Afghan gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  },
+  {
+    "id": "22c434bd-cc49-45f4-8c1f-527ba8e76413",
+    "name": "Most comfortable linen gharara",
+    "price": 0,
+    "sizes": [
+      "2Y",
+      "4Y",
+      "6Y",
+      "8Y",
+      "10Y",
+      "12Y"
+    ],
+    "stock": 10,
+    "colors": [
+      "Coral",
+      "Pink",
+      "Blue"
+    ],
+    "images": [
+      {
+        "image_url": "/kids-girls-lehenga.webp",
+        "sort_order": 0
+      }
+    ],
+    "name_bn": null,
+    "category": "Party Wear",
+    "is_active": true,
+    "description": "Real product listing from the shared Facebook product sheet.",
+    "is_featured": false,
+    "compare_price": null,
+    "description_bn": "শেয়ার করা ফেসবুক প্রোডাক্ট শীটের বাস্তব লিস্টিং।"
+  }
+]
