@@ -5,6 +5,7 @@ import { OwnerAuthProvider } from "@/lib/owner-auth"
 import { useRouter } from "@/lib/router"
 import { SiteHeader } from "@/components/site/site-header"
 import { SiteFooter } from "@/components/site/site-footer"
+import { CustomerChat } from "@/components/site/customer-chat"
 import { HomePage } from "@/pages/home"
 import { ShopPage, CategoryPage } from "@/pages/shop"
 import { ProductPage } from "@/pages/product"
@@ -40,6 +41,7 @@ function StoreLayout({ children }: { children: React.ReactNode }) {
       <SiteHeader categories={categories} settings={settings} />
       <main className="flex-1">{children}</main>
       <SiteFooter categories={categories} settings={settings} />
+      <CustomerChat />
     </div>
   )
 }

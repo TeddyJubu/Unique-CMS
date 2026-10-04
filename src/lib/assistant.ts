@@ -42,6 +42,35 @@ export function getChatKey(): string {
   return key
 }
 
+function getCustomerChatKey(): string {
+  let key = localStorage.getItem("ucp-customer-chat-key")
+  if (!key) {
+    key = `cust-${crypto.randomUUID()}`
+    localStorage.setItem("ucp-customer-chat-key", key)
+  }
+  return key
+}
+
+export async function checkCustomerAssistant(): Promise<{ configured: boolean; shopName?: string }> {
+  const { data, error } = await supabase.functions.invoke("assistant-bridge", {
+    body: { action: "status", mode: "customer" },
+  })
+  if (error) return { configured: false }
+  return { configured: Boolean((data as any)?.configured), shopName: (data as any)?.shopName }
+}
+
+export async function sendCustomerMessage(message: string): Promise<BridgeResult> {
+  const { data, error } = await supabase.functions.invoke("assistant-bridge", {
+    body: { action: "send", mode: "customer", chatKey: getCustomerChatKey(), message },
+  })
+  if (error) {
+    const status = (error as { status?: number }).status
+    if (status === 429) return { error: "rate_limited" }
+    return { error: "network" }
+  }
+  return (data ?? {}) as BridgeResult
+}
+
 export async function checkAssistantConfigured(phone: string, pin: string): Promise<boolean> {
   const res = await callBridge({ action: "status", phone, pin })
   return res.configured === true
