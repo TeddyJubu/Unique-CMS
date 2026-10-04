@@ -39,7 +39,7 @@ function StoreLayout({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <div className="flex min-h-svh flex-col bg-background">
+    <div className="site-shell flex min-h-svh flex-col bg-background">
       <SiteHeader categories={categories} settings={settings} />
       <main className="flex-1">{children}</main>
       <SiteFooter categories={categories} settings={settings} />
