@@ -59,7 +59,15 @@ export async function checkCustomerAssistant(): Promise<{ configured: boolean; s
   return { configured: Boolean((data as any)?.configured), shopName: (data as any)?.shopName }
 }
 
-export async function sendCustomerMessage(message: string): Promise<BridgeResult> {
+export type ProductCard = {
+  id: string
+  name: string
+  price: number
+  image: string | null
+  stock: number | null
+}
+
+export async function sendCustomerMessage(message: string): Promise<BridgeResult & { products?: ProductCard[]; whatsapp?: string }> {
   const { data, error } = await supabase.functions.invoke("assistant-bridge", {
     body: { action: "send", mode: "customer", chatKey: getCustomerChatKey(), message },
   })

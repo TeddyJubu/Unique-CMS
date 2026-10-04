@@ -1,14 +1,66 @@
 import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/lib/i18n"
-import { checkCustomerAssistant, sendCustomerMessage } from "@/lib/assistant"
+import { checkCustomerAssistant, sendCustomerMessage, type ProductCard } from "@/lib/assistant"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { LoaderCircle, MessageCircle, Send, Sparkles, X } from "lucide-react"
+import { navigate } from "@/lib/router"
 import { cn } from "@/lib/utils"
 
 type Message = {
   role: "user" | "assistant"
   text: string
+  products?: ProductCard[]
+  whatsapp?: string
+}
+
+function WhatsAppLinkButton({ phone, label }: { phone: string; label: string }) {
+  const digits = phone.replace(/[^0-9]/g, "")
+  const href = `https://wa.me/${digits}`
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-1 inline-flex items-center gap-2 border border-green-600 bg-green-600 px-3 py-2 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-700"
+    >
+      <MessageCircle className="size-4" /> {label}
+    </a>
+  )
+}
+
+function ProductCards({ products }: { products: ProductCard[] }) {
+  return (
+    <div className="mt-2 grid grid-cols-2 gap-2">
+      {products.map((p) => (
+        <button
+          key={p.id}
+          onClick={() => navigate(`/product?id=${p.id}`)}
+          className="group overflow-hidden border border-border bg-card text-left transition-colors hover:border-primary"
+        >
+          <div className="aspect-square w-full overflow-hidden bg-muted">
+            {p.image ? (
+              <img
+                src={p.image}
+                alt={p.name}
+                className="size-full object-cover transition-transform group-hover:scale-105"
+                loading="lazy"
+              />
+            ) : (
+              <div className="flex size-full items-center justify-center text-xs text-muted-foreground">—</div>
+            )}
+          </div>
+          <div className="p-2">
+            <p className="line-clamp-2 text-xs font-medium text-foreground">{p.name}</p>
+            <p className="mt-1 text-xs font-bold text-primary">Tk {Number(p.price).toLocaleString()}</p>
+            {p.stock !== null && p.stock <= 0 && (
+              <p className="mt-0.5 text-[10px] text-destructive">Out of stock</p>
+            )}
+          </div>
+        </button>
+      ))}
+    </div>
+  )
 }
 
 export function CustomerChat() {
@@ -30,6 +82,7 @@ export function CustomerChat() {
     working: locale === "bn" ? "লিখছে..." : "Typing...",
     netError: locale === "bn" ? "সংযোগে সমস্যা। আবার চেষ্টা করুন।" : "Connection problem. Please try again.",
     rateError: locale === "bn" ? "অনেক বার্তা পাঠানো হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।" : "Too many messages. Please wait a moment and try again.",
+    whatsapp: locale === "bn" ? "হোয়াটসঅ্যাপে কথা বলুন" : "Chat on WhatsApp",
     hi: locale === "bn"
       ? "আসসালামু আলাইকুম! আমি লিটল লুপের সহকারী। পণ্য খুঁজে দিতে পারি, ডেলিভারি চার্জ বলতে পারি, অর্ডারের অবস্থা দেখাতে পারি — কী জানতে চান?"
       : "Hello! I'm the Little Loop assistant. I can help you find products, check delivery charges, or track your order — what would you like to know?",
@@ -67,7 +120,15 @@ export function CustomerChat() {
         setError(res.error === "rate_limited" ? L.rateError : L.netError)
       } else {
         const reply = res.text?.trim()
-        setMessages((prev) => [...prev, { role: "assistant", text: reply || "…" }])
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            text: reply || "…",
+            products: res.products?.length ? res.products : undefined,
+            whatsapp: res.whatsapp ?? undefined,
+          },
+        ])
       }
     } catch {
       setError(L.netError)
@@ -82,7 +143,6 @@ export function CustomerChat() {
 
   return (
     <>
-      {/* Floating launcher button */}
       {!open && checked && available && (
         <button
           onClick={() => setOpen(true)}
@@ -124,15 +184,21 @@ export function CustomerChat() {
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {messages.map((msg, i) => (
               <div key={i} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
-                <div
-                  className={cn(
-                    "max-w-[85%] px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap",
-                    msg.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "border border-border bg-card text-foreground"
+                <div className="max-w-[92%]">
+                  <div
+                    className={cn(
+                      "px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap",
+                      msg.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "border border-border bg-card text-foreground"
+                    )}
+                  >
+                    {msg.text}
+                  </div>
+                  {msg.products && msg.products.length > 0 && <ProductCards products={msg.products} />}
+                  {msg.whatsapp && (
+                    <WhatsAppLinkButton phone={msg.whatsapp} label={L.whatsapp} />
                   )}
-                >
-                  {msg.text}
                 </div>
               </div>
             ))}

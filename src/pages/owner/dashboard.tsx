@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/alert-dialog"
 import { navigate } from "@/lib/router"
 import { fetchAllOrders, fetchProducts, updateOrderStatus, updateOrderPaymentStatus, formatPrice } from "@/lib/shop"
-import type { Order } from "@/lib/supabase"
+import type { Order, Product } from "@/lib/supabase"
 import { CmsLayout } from "@/components/site/cms-layout"
 import {
   Package, TrendingUp, Clock, Tag, ArrowRight,
-  Phone, MessageCircle, Check, Truck, XCircle, DollarSign, ShoppingBag
+  Phone, MessageCircle, Check, Truck, XCircle, DollarSign, ShoppingBag, Sparkles
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -34,6 +34,7 @@ export function OwnerDashboard() {
   const { t, locale } = useI18n()
   const { settings, credentials } = useOwnerAuth()
   const [orders, setOrders] = useState<Order[]>([])
+  const [products, setProducts] = useState<Product[]>([])
   const [productCount, setProductCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [confirmAction, setConfirmAction] = useState<{ type: string; orderId: string } | null>(null)
@@ -44,6 +45,7 @@ export function OwnerDashboard() {
       if (!credentials) return
       const [o, p] = await Promise.all([fetchAllOrders(credentials, 10), fetchProducts()])
       setOrders(o)
+      setProducts(p)
       setProductCount(p.length)
     } catch (e) {
       console.error(e)
@@ -58,6 +60,26 @@ export function OwnerDashboard() {
   const todayOrders = orders.filter((o) => new Date(o.created_at).toDateString() === today)
   const todayRevenue = todayOrders.filter((o) => o.status !== "cancelled").reduce((sum, o) => sum + o.total, 0)
   const pendingCount = orders.filter((o) => o.status === "pending").length
+  const lowStock = products.filter((p) => p.stock <= 5).sort((a, b) => a.stock - b.stock).slice(0, 5)
+  const outOfStock = products.filter((p) => p.stock <= 0).length
+  const topProducts = (() => {
+    const counts = new Map<string, number>()
+    for (const o of todayOrders) {
+      if (o.status === "cancelled") continue
+      for (const item of o.order_items ?? []) {
+        counts.set(item.product_name, (counts.get(item.product_name) ?? 0) + item.quantity)
+      }
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3)
+  })()
+  const districts = (() => {
+    const counts = new Map<string, number>()
+    for (const o of todayOrders) {
+      if (o.status === "cancelled") continue
+      counts.set(o.district, (counts.get(o.district) ?? 0) + 1)
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3)
+  })()
 
   const handleStatusUpdate = async (orderId: string, status: Order["status"]) => {
     if (!credentials) return
@@ -98,6 +120,79 @@ export function OwnerDashboard() {
             <p className="text-xs text-muted-foreground">{stat.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* Daily digest */}
+      <div className="mb-8 rounded-xl border border-border bg-card p-5">
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4.5 text-primary" />
+          <h3 className="text-sm font-bold uppercase tracking-widest">
+            {locale === "bn" ? "আজকের সারসংক্ষেপ" : "Today at a glance"}
+          </h3>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* Top sellers */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground">
+              {locale === "bn" ? "আজকের বেস্ট সেলার" : "Top sellers today"}
+            </p>
+            {topProducts.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">{locale === "bn" ? "এখনো কিছু বিক্রি হয়নি" : "Nothing sold yet today"}</p>
+            ) : (
+              <ul className="mt-2 space-y-1.5">
+                {topProducts.map(([name, qty]) => (
+                  <li key={name} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="truncate text-foreground/80">{name}</span>
+                    <span className="shrink-0 font-bold text-primary">x{qty}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {/* Where orders come from */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground">
+              {locale === "bn" ? "অর্ডার কোথা থেকে" : "Where orders came from"}
+            </p>
+            {districts.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">{locale === "bn" ? "এখনো অর্ডার নেই" : "No orders yet today"}</p>
+            ) : (
+              <ul className="mt-2 space-y-1.5">
+                {districts.map(([district, count]) => (
+                  <li key={district} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="truncate text-foreground/80">{district}</span>
+                    <span className="shrink-0 font-bold text-primary">{count}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {/* Low stock alerts */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground">
+              {locale === "bn" ? "স্টক কম" : "Low stock alerts"}
+            </p>
+            {lowStock.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">{locale === "bn" ? "সব ঠিক আছে" : "All good"}</p>
+            ) : (
+              <ul className="mt-2 space-y-1.5">
+                {lowStock.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="truncate text-foreground/80">{p.name}</span>
+                    <span className={cn("shrink-0 font-bold", p.stock <= 0 ? "text-destructive" : "text-amber-600")}>
+                      {p.stock <= 0 ? (locale === "bn" ? "শেষ" : "Out") : `${p.stock} left`}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {outOfStock > 0 && (
+              <p className="mt-2 text-xs text-destructive">
+                {locale === "bn" ? `${outOfStock} টি পণ্যের স্টক শেষ` : `${outOfStock} product(s) out of stock`}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Quick actions */}
