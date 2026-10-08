@@ -36,7 +36,7 @@ type Order = {
   order_items: OrderItem[];
 };
 
-const Shop = { name: "Little Loop by Princess" };
+const Shop = { name: "Unique Collection by Princess" };
 
 function tk(amount: number): string {
   return `Tk ${Number(amount).toLocaleString("en-US")}`;

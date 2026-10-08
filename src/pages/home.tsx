@@ -43,7 +43,7 @@ export function HomePage() {
     setSeo({
       title: settings
         ? `${settings.shop_name} — Kids & Family Fashion`
-        : "Little Loop by Princess — Kids & Family Fashion",
+        : "Unique Collection by Princess — Kids & Family Fashion",
       description: settings?.hero_subtitle ?? "Playful clothes for every little adventure",
       image: "/kids-hero.webp",
     })
@@ -64,7 +64,7 @@ export function HomePage() {
       <section className="relative min-h-[60vh] overflow-hidden md:min-h-[80vh]">
         <img
           src={heroImage}
-          alt="Little Loop kids collection"
+          alt="Unique Collection kids collection"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/20" />

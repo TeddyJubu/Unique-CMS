@@ -89,8 +89,8 @@ export function CustomerChat() {
     rateError: locale === "bn" ? "অনেক বার্তা পাঠানো হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।" : "Too many messages. Please wait a moment and try again.",
     whatsapp: locale === "bn" ? "হোয়াটসঅ্যাপে কথা বলুন" : "Chat on WhatsApp",
     hi: locale === "bn"
-      ? "আসসালামু আলাইকুম! আমি লিটল লুপের সহকারী। পণ্য খুঁজে দিতে পারি, ডেলিভারি চার্জ বলতে পারি, অর্ডারের অবস্থা দেখাতে পারি — কী জানতে চান?"
-      : "Hello! I'm the Little Loop assistant. I can help you find products, check delivery charges, or track your order — what would you like to know?",
+      ? "আসসালামু আলাইকুম! আমি ইউনিক কালেকশনের সহকারী। পণ্য খুঁজে দিতে পারি, ডেলিভারি চার্জ বলতে পারি, অর্ডারের অবস্থা দেখাতে পারি — কী জানতে চান?"
+      : "Hello! I'm the Unique Collection assistant. I can help you find products, check delivery charges, or track your order — what would you like to know?",
     fallbackTitle: locale === "bn" ? "আমাদের সাথে যোগাযোগ করুন" : "Get in touch",
     fallbackMsg: locale === "bn"
       ? "আমাদের এআই সহকারী এখন সেট আপ হচ্ছে। এর মধ্যে আপনি হোয়াটসঅ্যাপে আমাদের সাথে কথা বলতে পারেন — আমরা দ্রুত উত্তর দেই!"

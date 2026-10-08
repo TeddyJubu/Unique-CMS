@@ -55,7 +55,7 @@ export function ProductPage() {
   useEffect(() => {
     if (product) {
       setSeo({
-        title: `${product.name} — Little Loop by Princess`,
+        title: `${product.name} — Unique Collection by Princess`,
         description: product.description ?? undefined,
         image: product.product_images?.[0]?.image_url ?? null,
         type: "product",
@@ -119,7 +119,6 @@ export function ProductPage() {
   const images = product.product_images || []
   const hasDiscount = product.compare_price && product.compare_price > product.price
   const inStock = product.stock > 0
-
 
   return (
     <div className="pt-16">

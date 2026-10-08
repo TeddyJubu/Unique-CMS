@@ -14,7 +14,7 @@ export function SiteFooter({
 
   const shopName = locale === "bn" && settings?.shop_name_bn
     ? settings.shop_name_bn
-    : settings?.shop_name || "Little Loop by Princess"
+    : settings?.shop_name || "Unique Collection by Princess"
 
   const quickLinks = [
     { label: t("home"), path: "/" },

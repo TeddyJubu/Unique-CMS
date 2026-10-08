@@ -20,7 +20,7 @@ const demoProductSpecs = [
   ["girls", "Coral Bloom Frock", "কোরাল ব্লুম ফ্রক", 1450, 1800, "/kids-girls-frock.webp", ["2Y", "4Y", "6Y", "8Y"], ["Coral", "Pink"]],
   ["girls", "Rainbow Day Dress", "রেইনবো ডে ড্রেস", 1250, 1500, "/kids-rainbow-dress.webp", ["2Y", "4Y", "6Y", "8Y"], ["Rainbow", "Yellow"]],
   ["girls", "Petal Party Frock", "পেটাল পার্টি ফ্রক", 1650, 2100, "/kids-girls-frock.webp", ["4Y", "6Y", "8Y", "10Y"], ["Pink", "White"]],
-  ["girls", "Little Star Tunic", "লিটল স্টার টিউনিক", 950, null, "/kids-rainbow-dress.webp", ["2Y", "4Y", "6Y"], ["Blue", "Yellow"]],
+  ["girls", "Little Star Tunic", "লিটল স্টার টিউনিস", 950, null, "/kids-rainbow-dress.webp", ["2Y", "4Y", "6Y"], ["Blue", "Yellow"]],
   ["girls", "Cotton Candy Skirt Set", "কটন ক্যান্ডি স্কার্ট সেট", 1150, 1400, "/kids-printed-set.webp", ["4Y", "6Y", "8Y"], ["Pink", "Teal"]],
   ["girls", "Mango Summer Dress", "ম্যাঙ্গো সামার ড্রেস", 1050, null, "/kids-rainbow-dress.webp", ["2Y", "4Y", "6Y"], ["Yellow", "Green"]],
   ["boys", "Royal Blue Panjabi", "রয়্যাল ব্লু পাঞ্জাবি", 1550, 1900, "/kids-boy-panjabi.webp", ["2Y", "4Y", "6Y", "8Y", "10Y"], ["Blue"]],
@@ -114,7 +114,7 @@ const sheetProducts: Product[] = sheetProductSpecs.map(([name, categoryName, pri
 
 const productCatalog = sheetProducts.length > 0 ? sheetProducts : demoProducts
 
-const demoSettings: ShopSettings = { id: "demo-settings", shop_name: "Little Loop by Princess", shop_name_bn: "লিটল লুপ বাই প্রিন্সেস", whatsapp_number: "+8801700000000", bkash_number: "01XXXXXXXXX", delivery_inside_dhaka: 60, delivery_outside_dhaka: 120, hero_title: "Big Little Moments", hero_title_bn: "ছোট্ট মুহূর্ত, বড় আনন্দ", hero_subtitle: "Playful clothes for every little adventure", hero_subtitle_bn: "প্রতিটি ছোট্ট অ্যাডভেঞ্চারের জন্য আনন্দময় পোশাক" }
+const demoSettings: ShopSettings = { id: "demo-settings", shop_name: "Unique Collection by Princess", shop_name_bn: "ইউনিক কালেকশন বাই প্রিন্সেস", whatsapp_number: "+8801700000000", bkash_number: "01XXXXXXXXX", delivery_inside_dhaka: 60, delivery_outside_dhaka: 120, hero_title: "Big Little Moments", hero_title_bn: "ছোট্ট মুহূর্ত, বড় আনন্দ", hero_subtitle: "Playful clothes for every little adventure", hero_subtitle_bn: "প্রতিটি ছোট্ট অ্যাডভেঞ্চারের জন্য আনন্দময় পোশাক" }
 
 // The owner phone/PIN are deliberately NOT readable by the browser. Admin
 // actions send the credentials to the server, which verifies them itself.
@@ -457,18 +457,4 @@ export function getWhatsAppOrderMessage(
   shopName: string
 ): string {
   return `Hello ${shopName}! I'd like to order:%0A%0A*Product:* ${productName}%0A*Size:* ${size}%0A*Color:* ${color}%0A*Price:* Tk ${price}%0A%0AIs this available?`
-}
-
-export function getWhatsAppCheckoutMessage(
-  _orderNumber: string,
-  items: { name: string; size: string; color: string; quantity: number; price: number }[],
-  total: number,
-  shopName: string
-): string {
-  let msg = `Hello ${shopName}! I want to place an order:%0A%0A`
-  items.forEach((item, i) => {
-    msg += `${i + 1}. ${item.name} - ${item.size}/${item.color} x${item.quantity} = Tk ${item.price * item.quantity}%0A`
-  })
-  msg += `%0A*Total: Tk ${total}*%0A%0AMy details:%0AName: %0APhone: %0AAddress: `
-  return msg
 }

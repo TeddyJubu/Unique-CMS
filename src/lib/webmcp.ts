@@ -3,7 +3,7 @@ import type { ShopSettings, Product, Category } from "@/lib/supabase"
 export function generateWebMCPManifest(settings: ShopSettings | null): object {
   return {
     "$schema": "https://schema.webmcp.org/v1",
-    "name": settings?.shop_name || "Little Loop by Princess",
+    "name": settings?.shop_name || "Unique Collection by Princess",
     "description": "Playful kids clothing store in Bangladesh. Frocks, Panjabis, matching sets, Eid wear and party outfits. Cash on Delivery and bKash accepted.",
     "type": "ecommerce",
     "actions": [
@@ -118,7 +118,7 @@ export function generateStructuredData(settings: ShopSettings | null, products: 
   return {
     "@context": "https://schema.org",
     "@type": "OnlineStore",
-    "name": settings?.shop_name || "Little Loop by Princess",
+    "name": settings?.shop_name || "Unique Collection by Princess",
     "description": "Playful children's clothing store in Bangladesh",
     "paymentAccepted": "Cash on Delivery, bKash",
     "currenciesAccepted": "BDT",
