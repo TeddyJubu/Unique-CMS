@@ -71,6 +71,7 @@ export function SiteHeader({
             variant="ghost"
             size="icon"
             className="md:hidden"
+            aria-label={locale === "bn" ? "মেনু খুলুন" : "Open menu"}
             onClick={() => setMobileOpen(true)}
           >
             <Menu className="size-5" />
@@ -101,6 +102,7 @@ export function SiteHeader({
 
           {/* Actions */}
           <div className="flex items-center gap-1 md:gap-2">
+            <a href="#/owner" className="hidden min-h-11 items-center rounded-lg px-2 text-xs font-medium text-foreground/80 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring xl:inline-flex">{t("manageShop")}</a>
             <Button
               variant="ghost"
               size="icon"
@@ -125,7 +127,7 @@ export function SiteHeader({
               size="icon"
               onClick={() => navigate("/wishlist")}
               aria-label={locale === "bn" ? "উইশলিস্ট" : "Wishlist"}
-              className="relative"
+              className="relative hidden sm:flex"
             >
               <Heart className="size-5" />
               {wishCount > 0 && (
@@ -139,7 +141,7 @@ export function SiteHeader({
               size="icon"
               onClick={() => navigate("/account")}
               aria-label={t("myAccount")}
-              className="relative"
+              className="relative hidden sm:flex"
             >
               {customer ? (
                 <span className="flex size-6 items-center justify-center bg-primary text-xs font-bold uppercase text-primary-foreground">
@@ -241,7 +243,7 @@ export function SiteHeader({
                 setMobileOpen(false)
               }}
             >
-              {t("ownerLogin")}
+              {t("manageShop")}
             </button>
           </nav>
         </SheetContent>

@@ -1,19 +1,12 @@
+import { OrderConfirmation } from "@/components/site/order-confirmation"
+import { OwnerError } from "@/components/site/owner-feedback"
+import { ownerErrorMessage } from "@/lib/owner-errors"
 import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { useOwnerAuth } from "@/lib/owner-auth"
 import { Button } from "@/components/ui/button"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { navigate } from "@/lib/router"
-import { fetchAllOrders, fetchProducts, updateOrderStatus, updateOrderPaymentStatus, formatPrice } from "@/lib/shop"
+import { fetchAllOrders, fetchOwnerProducts, updateOrderStatus, updateOrderPaymentStatus, formatPrice } from "@/lib/shop"
 import type { Order, Product } from "@/lib/supabase"
 import { CmsLayout } from "@/components/site/cms-layout"
 import {
@@ -37,18 +30,20 @@ export function OwnerDashboard() {
   const [products, setProducts] = useState<Product[]>([])
   const [productCount, setProductCount] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [confirmAction, setConfirmAction] = useState<{ type: string; orderId: string } | null>(null)
 
   const load = async () => {
     setLoading(true)
+    setError(null)
     try {
       if (!credentials) return
-      const [o, p] = await Promise.all([fetchAllOrders(credentials, 10), fetchProducts()])
+      const [o, p] = await Promise.all([fetchAllOrders(credentials), fetchOwnerProducts()])
       setOrders(o)
       setProducts(p)
       setProductCount(p.length)
     } catch (e) {
-      console.error(e)
+      setError(ownerErrorMessage(e, t("ordersLoadError"), t("ownerSessionError")))
     } finally {
       setLoading(false)
     }
@@ -82,17 +77,17 @@ export function OwnerDashboard() {
   })()
 
   const handleStatusUpdate = async (orderId: string, status: Order["status"]) => {
-    if (!credentials) return
+    if (!credentials) throw new Error("owner_session")
     await updateOrderStatus(credentials, orderId, status)
     setConfirmAction(null)
-    load()
+    void load()
   }
 
   const handleMarkPaid = async (orderId: string) => {
-    if (!credentials) return
+    if (!credentials) throw new Error("owner_session")
     await updateOrderPaymentStatus(credentials, orderId, "paid")
     setConfirmAction(null)
-    load()
+    void load()
   }
 
   const stats = [
@@ -100,6 +95,8 @@ export function OwnerDashboard() {
     { label: t("todayRevenue"), value: todayRevenue === 0 ? "Tk 0" : formatPrice(todayRevenue, locale), icon: TrendingUp },
     { label: t("totalProducts"), value: String(productCount), icon: Tag },
   ]
+
+  if (error) return <CmsLayout title={settings?.shop_name}><OwnerError message={error} retry={() => void load()} /></CmsLayout>
 
   return (
     <CmsLayout title={settings?.shop_name}>
@@ -198,7 +195,7 @@ export function OwnerDashboard() {
       {/* Quick actions */}
       <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
         <button
-          onClick={() => navigate("/owner/post")}
+          onClick={() => navigate("/owner/products/new")}
           className="flex items-center gap-3 rounded-xl border border-border bg-primary p-4 text-left text-primary-foreground transition-transform hover:scale-[1.02]"
         >
           <Package className="size-6 shrink-0" strokeWidth={1.5} />
@@ -268,36 +265,15 @@ export function OwnerDashboard() {
       </div>
 
       {/* Confirm dialog */}
-      <AlertDialog open={!!confirmAction} onOpenChange={(open) => !open && setConfirmAction(null)}>
-        <AlertDialogContent className="rounded-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-lg font-bold">{t("areYouSure")}</AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-muted-foreground">
-              {confirmAction?.type === "confirm" && t("confirm")}
-              {confirmAction?.type === "ship" && t("ship")}
-              {confirmAction?.type === "deliver" && t("deliver")}
-              {confirmAction?.type === "cancel" && t("cancel")}
-              {confirmAction?.type === "markPaid" && t("markPaid")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl">{t("no")}</AlertDialogCancel>
-            <AlertDialogAction
-              className="rounded-xl"
-              onClick={() => {
-                if (!confirmAction) return
-                if (confirmAction.type === "confirm") handleStatusUpdate(confirmAction.orderId, "confirmed")
-                else if (confirmAction.type === "ship") handleStatusUpdate(confirmAction.orderId, "shipped")
-                else if (confirmAction.type === "deliver") handleStatusUpdate(confirmAction.orderId, "delivered")
-                else if (confirmAction.type === "cancel") handleStatusUpdate(confirmAction.orderId, "cancelled")
-                else if (confirmAction.type === "markPaid") handleMarkPaid(confirmAction.orderId)
-              }}
-            >
-              {t("yes")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <OrderConfirmation action={confirmAction?.type ?? null} order={orders.find((order) => order.id === confirmAction?.orderId)} onClose={() => setConfirmAction(null)} onConfirm={async () => {
+        if (!confirmAction) return
+        const { type, orderId } = confirmAction
+        if (type === "markPaid") await handleMarkPaid(orderId)
+        else {
+          const statuses: Record<string, Order["status"]> = { confirm: "confirmed", ship: "shipped", deliver: "delivered", cancel: "cancelled" }
+          if (statuses[type]) await handleStatusUpdate(orderId, statuses[type])
+        }
+      }} />
     </CmsLayout>
   )
 }

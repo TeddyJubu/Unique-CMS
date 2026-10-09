@@ -4,13 +4,14 @@ import { useOwnerAuth } from "@/lib/owner-auth"
 import { Button } from "@/components/ui/button"
 import { navigate } from "@/lib/router"
 import { Lock, Phone, ArrowLeft, Store } from "lucide-react"
+import { OwnerError } from "@/components/site/owner-feedback"
 
 export function OwnerLoginPage() {
-  const { t } = useI18n()
+  const { t, locale, setLocale } = useI18n()
   const { login, settings } = useOwnerAuth()
   const [phone, setPhone] = useState("")
   const [pin, setPin] = useState("")
-  const [error, setError] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const [submitting, setSubmitting] = useState(false)
 
@@ -18,12 +19,14 @@ export function OwnerLoginPage() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      if (await login(phone, pin)) {
-        setError(false)
+      if (await login(phone.trim(), pin)) {
+        setError(null)
         navigate("/owner/dashboard")
       } else {
-        setError(true)
+        setError(t("loginError"))
       }
+    } catch {
+      setError(t("loginConnectionError"))
     } finally {
       setSubmitting(false)
     }
@@ -37,6 +40,7 @@ export function OwnerLoginPage() {
       >
         <ArrowLeft className="size-4" /> {t("backToShop")}
       </button>
+      <button onClick={() => setLocale(locale === "en" ? "bn" : "en")} aria-label="Switch language" className="mb-4 min-h-11 rounded-lg px-3 text-sm text-primary">{locale === "en" ? "বাংলা" : "English"}</button>
 
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-sm">
         <div className="mb-8 text-center">
@@ -47,18 +51,19 @@ export function OwnerLoginPage() {
             {settings?.shop_name || t("ownerPanel")}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            {t("ownerPhone")} & {t("ownerPin")}
+            {t("loginHelp")}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="mb-2 block text-sm font-medium text-foreground/80">
+            <label htmlFor="owner-phone" className="mb-2 block text-sm font-medium text-foreground/80">
               {t("ownerPhone")}
             </label>
             <div className="flex items-center gap-2.5 rounded-xl border border-input bg-background px-4 focus-within:ring-2 focus-within:ring-ring">
               <Phone className="size-5 text-muted-foreground" />
               <input
+                id="owner-phone"
                 type="tel"
                 required
                 value={phone}
@@ -70,28 +75,25 @@ export function OwnerLoginPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-foreground/80">
+            <label htmlFor="owner-pin" className="mb-2 block text-sm font-medium text-foreground/80">
               {t("ownerPin")}
             </label>
             <div className="flex items-center gap-2.5 rounded-xl border border-input bg-background px-4 focus-within:ring-2 focus-within:ring-ring">
               <Lock className="size-5 text-muted-foreground" />
               <input
+                id="owner-pin"
                 type="password"
                 required
                 maxLength={32}
                 value={pin}
-                onChange={(e) => { setPin(e.target.value); setError(false) }}
+                onChange={(e) => { setPin(e.target.value); setError(null) }}
                 className="h-14 flex-1 bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
                 placeholder="••••••"
               />
             </div>
           </div>
 
-          {error && (
-            <p className="rounded-lg bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
-              {t("loginError")}
-            </p>
-          )}
+          <OwnerError message={error} />
 
           <Button
             type="submit"

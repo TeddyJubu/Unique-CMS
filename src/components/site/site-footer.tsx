@@ -146,6 +146,7 @@ export function SiteFooter({
         </div>
 
         <div className="mt-8 border-t border-border pt-6 text-center">
+          <a href="#/owner" className="mb-3 inline-flex min-h-11 items-center text-sm font-medium text-foreground/80 underline underline-offset-4 hover:text-primary">{t("manageShop")}</a>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} {shopName}. {t("allRights")}
           </p>

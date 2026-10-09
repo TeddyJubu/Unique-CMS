@@ -4,13 +4,16 @@ import { useOwnerAuth } from "@/lib/owner-auth"
 import { Button } from "@/components/ui/button"
 import { updateShopSettings } from "@/lib/shop"
 import { CmsLayout } from "@/components/site/cms-layout"
+import { OwnerError } from "@/components/site/owner-feedback"
+import { ownerErrorMessage } from "@/lib/owner-errors"
 import { Save, Check, Bot } from "lucide-react"
 
 export function OwnerSettingsPage() {
   const { t, locale } = useI18n()
-  const { settings, credentials, refreshSettings } = useOwnerAuth()
+  const { settings, settingsError, credentials, refreshSettings } = useOwnerAuth()
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     shop_name: settings?.shop_name || "",
@@ -58,14 +61,15 @@ export function OwnerSettingsPage() {
     e.preventDefault()
     if (!settings || !credentials) return
     setSaving(true)
+    setError(null)
     try {
       const updates: Record<string, string | number> = {
         shop_name: form.shop_name,
         shop_name_bn: form.shop_name_bn,
         whatsapp_number: form.whatsapp_number,
         bkash_number: form.bkash_number,
-        delivery_inside_dhaka: parseFloat(form.delivery_inside_dhaka) || 60,
-        delivery_outside_dhaka: parseFloat(form.delivery_outside_dhaka) || 120,
+        delivery_inside_dhaka: Number(form.delivery_inside_dhaka),
+        delivery_outside_dhaka: Number(form.delivery_outside_dhaka),
         hero_title: form.hero_title,
         hero_title_bn: form.hero_title_bn,
         hero_subtitle: form.hero_subtitle,
@@ -73,7 +77,7 @@ export function OwnerSettingsPage() {
       }
       if (form.owner_pin.trim()) {
         if (form.owner_pin.trim().length < 6) {
-          alert(locale === "bn" ? "পিন অন্তত ৬ অক্ষরের হতে হবে" : "PIN must be at least 6 characters")
+          setError(locale === "bn" ? "পিন অন্তত ৬ অক্ষরের হতে হবে" : "Enter a PIN with at least 6 characters before saving.")
           setSaving(false)
           return
         }
@@ -91,13 +95,17 @@ export function OwnerSettingsPage() {
       setTimeout(() => setSaved(false), 3000)
     } catch (err) {
       console.error(err)
-      alert(t("error"))
+      setError(ownerErrorMessage(err, t("settingsSaveError"), t("ownerSessionError")))
     } finally {
       setSaving(false)
     }
   }
 
   const inputClass = "h-12 w-full rounded-xl border border-input bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none"
+
+  if (settingsError || !settings) return <CmsLayout title={t("shopSettings")}>
+    {settingsError ? <OwnerError message={t("settingsLoadError")} retry={() => { void refreshSettings().catch(() => {}) }} /> : <p role="status">{t("loading")}</p>}
+  </CmsLayout>
 
   return (
     <CmsLayout title={t("shopSettings")}>
@@ -107,13 +115,14 @@ export function OwnerSettingsPage() {
         </div>
       )}
 
+      <OwnerError message={error} />
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Shop info */}
         <div className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold text-muted-foreground">{t("shopSettings")}</h3>
+          <h2 className="text-sm font-semibold text-muted-foreground">{t("shopSettings")}</h2>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("shopSettings")} (EN)</label>
-            <input
+            <label htmlFor="setting-shop_name" className="mb-1.5 block text-sm font-medium">{t("shopName")} (EN)</label>
+            <input id="setting-shop_name"
               type="text"
               value={form.shop_name}
               onChange={(e) => setForm({ ...form, shop_name: e.target.value })}
@@ -121,8 +130,8 @@ export function OwnerSettingsPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("shopSettings")} (বাংলা)</label>
-            <input
+            <label htmlFor="setting-shop_name_bn" className="mb-1.5 block text-sm font-medium">{t("shopName")} (বাংলা)</label>
+            <input id="setting-shop_name_bn"
               type="text"
               value={form.shop_name_bn}
               onChange={(e) => setForm({ ...form, shop_name_bn: e.target.value })}
@@ -133,10 +142,10 @@ export function OwnerSettingsPage() {
 
         {/* Contact */}
         <div className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold text-muted-foreground">{t("contactUs")}</h3>
+          <h2 className="text-sm font-semibold text-muted-foreground">{t("contactUs")}</h2>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("whatsappNumber")}</label>
-            <input
+            <label htmlFor="setting-whatsapp_number" className="mb-1.5 block text-sm font-medium">{t("whatsappNumber")}</label>
+            <input id="setting-whatsapp_number"
               type="text"
               value={form.whatsapp_number}
               onChange={(e) => setForm({ ...form, whatsapp_number: e.target.value })}
@@ -145,8 +154,8 @@ export function OwnerSettingsPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("bkashNumberSetting")}</label>
-            <input
+            <label htmlFor="setting-bkash_number" className="mb-1.5 block text-sm font-medium">{t("bkashNumberSetting")}</label>
+            <input id="setting-bkash_number"
               type="text"
               value={form.bkash_number}
               onChange={(e) => setForm({ ...form, bkash_number: e.target.value })}
@@ -158,23 +167,25 @@ export function OwnerSettingsPage() {
 
         {/* Delivery */}
         <div className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold text-muted-foreground">{t("deliveryCharge")}</h3>
+          <h2 className="text-sm font-semibold text-muted-foreground">{t("deliveryCharge")}</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1.5 block text-sm font-medium">{t("deliveryInside")}</label>
-              <input
+              <label htmlFor="setting-delivery_inside_dhaka" className="mb-1.5 block text-sm font-medium">{t("deliveryInside")}</label>
+              <input id="setting-delivery_inside_dhaka"
                 type="number"
                 min="0"
+                required
                 value={form.delivery_inside_dhaka}
                 onChange={(e) => setForm({ ...form, delivery_inside_dhaka: e.target.value })}
                 className={inputClass}
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium">{t("deliveryOutside")}</label>
-              <input
+              <label htmlFor="setting-delivery_outside_dhaka" className="mb-1.5 block text-sm font-medium">{t("deliveryOutside")}</label>
+              <input id="setting-delivery_outside_dhaka"
                 type="number"
                 min="0"
+                required
                 value={form.delivery_outside_dhaka}
                 onChange={(e) => setForm({ ...form, delivery_outside_dhaka: e.target.value })}
                 className={inputClass}
@@ -185,12 +196,12 @@ export function OwnerSettingsPage() {
 
         {/* Homepage */}
         <div className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold text-muted-foreground">
+          <h2 className="text-sm font-semibold text-muted-foreground">
             {locale === "bn" ? "হোমপেজ" : "Homepage"}
-          </h3>
+          </h2>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("heroTitleSetting")} (EN)</label>
-            <input
+            <label htmlFor="setting-hero_title" className="mb-1.5 block text-sm font-medium">{t("heroTitleSetting")} (EN)</label>
+            <input id="setting-hero_title"
               type="text"
               value={form.hero_title}
               onChange={(e) => setForm({ ...form, hero_title: e.target.value })}
@@ -198,8 +209,8 @@ export function OwnerSettingsPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("heroTitleSetting")} (বাংলা)</label>
-            <input
+            <label htmlFor="setting-hero_title_bn" className="mb-1.5 block text-sm font-medium">{t("heroTitleSetting")} (বাংলা)</label>
+            <input id="setting-hero_title_bn"
               type="text"
               value={form.hero_title_bn}
               onChange={(e) => setForm({ ...form, hero_title_bn: e.target.value })}
@@ -207,8 +218,8 @@ export function OwnerSettingsPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("heroSubtitleSetting")} (EN)</label>
-            <input
+            <label htmlFor="setting-hero_subtitle" className="mb-1.5 block text-sm font-medium">{t("heroSubtitleSetting")} (EN)</label>
+            <input id="setting-hero_subtitle"
               type="text"
               value={form.hero_subtitle}
               onChange={(e) => setForm({ ...form, hero_subtitle: e.target.value })}
@@ -216,8 +227,8 @@ export function OwnerSettingsPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("heroSubtitleSetting")} (বাংলা)</label>
-            <input
+            <label htmlFor="setting-hero_subtitle_bn" className="mb-1.5 block text-sm font-medium">{t("heroSubtitleSetting")} (বাংলা)</label>
+            <input id="setting-hero_subtitle_bn"
               type="text"
               value={form.hero_subtitle_bn}
               onChange={(e) => setForm({ ...form, hero_subtitle_bn: e.target.value })}
@@ -228,10 +239,10 @@ export function OwnerSettingsPage() {
 
         {/* Security */}
         <div className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold text-muted-foreground">{t("changePin")}</h3>
+          <h2 className="text-sm font-semibold text-muted-foreground">{t("changePin")}</h2>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("newPin")}</label>
-            <input
+            <label htmlFor="setting-owner_pin" className="mb-1.5 block text-sm font-medium">{t("newPin")}</label>
+            <input id="setting-owner_pin"
               type="password"
               maxLength={32}
               minLength={6}
@@ -255,21 +266,19 @@ export function OwnerSettingsPage() {
               <Bot className="size-4.5" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-muted-foreground">
+              <h2 className="text-sm font-semibold text-muted-foreground">
                 {locale === "bn" ? "এআই সহকারী" : "AI Assistant"}
-              </h3>
+              </h2>
               <p className="text-xs text-muted-foreground">
-                {locale === "bn"
-                  ? "আপনার OpenAI-compatible API সংযুক্ত করুন সহকারী চালু করতে"
-                  : "Connect your OpenAI-compatible API to power the assistant"}
+                {t("aiConnectionHelp")}
               </p>
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">
-              {locale === "bn" ? "API URL" : "API URL"}
+            <label htmlFor="setting-ai_api_url" className="mb-1.5 block text-sm font-medium">
+              {t("aiServiceAddress")}
             </label>
-            <input
+            <input id="setting-ai_api_url"
               type="url"
               value={form.ai_api_url}
               onChange={(e) => setForm({ ...form, ai_api_url: e.target.value })}
@@ -277,16 +286,14 @@ export function OwnerSettingsPage() {
               placeholder="https://api.openai.com/v1"
             />
             <p className="mt-1.5 text-xs text-muted-foreground">
-              {locale === "bn"
-                ? "OpenAI-compatible endpoint (নিডিন /chat/completions ছাড়া)"
-                : "Your OpenAI-compatible endpoint (without /chat/completions)"}
+              {t("aiServiceAddressHelp")}
             </p>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">
-              {locale === "bn" ? "API Key" : "API Key"}
+            <label htmlFor="setting-ai_api_key" className="mb-1.5 block text-sm font-medium">
+              {t("aiConnectionKey")}
             </label>
-            <input
+            <input id="setting-ai_api_key"
               type="password"
               value={form.ai_api_key}
               onChange={(e) => setForm({ ...form, ai_api_key: e.target.value })}
@@ -294,16 +301,14 @@ export function OwnerSettingsPage() {
               placeholder={locale === "bn" ? "••••••••••••" : "sk-..."}
             />
             <p className="mt-1.5 text-xs text-muted-foreground">
-              {locale === "bn"
-                ? "কী সেভ করা হলে নিরাপদে সার্ভারে থাকবে। খালি রাখলে পুরনো কী বহাল থাকবে।"
-                : "Key is stored securely on the server. Leave blank to keep the existing key."}
+              {t("aiConnectionKeyHelp")}
             </p>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium">
-              {locale === "bn" ? "মডেল" : "Model"}
+            <label htmlFor="setting-ai_model" className="mb-1.5 block text-sm font-medium">
+              {t("aiModelName")}
             </label>
-            <input
+            <input id="setting-ai_model"
               type="text"
               value={form.ai_model}
               onChange={(e) => setForm({ ...form, ai_model: e.target.value })}
@@ -311,9 +316,7 @@ export function OwnerSettingsPage() {
               placeholder="gpt-4o-mini"
             />
             <p className="mt-1.5 text-xs text-muted-foreground">
-              {locale === "bn"
-                ? "যেকোনো OpenAI-compatible মডেল নাম"
-                : "Any OpenAI-compatible model name"}
+              {t("aiModelNameHelp")}
             </p>
           </div>
         </div>

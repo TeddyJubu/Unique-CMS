@@ -1,5 +1,6 @@
 import { supabase, type Product, type Category, type Order, type ShopSettings } from "@/lib/supabase"
 import { cached, invalidateCache } from "@/lib/cache"
+import { throwOwnerError } from "@/lib/owner-errors"
 
 export function formatPrice(amount: number, locale: "en" | "bn" = "en"): string {
   if (amount === 0) return locale === "bn" ? "মূল্য জানতে যোগাযোগ করুন" : "Price on request"
@@ -245,7 +246,7 @@ export async function verifyOwnerLogin(phone: string, pin: string): Promise<bool
     p_phone: phone,
     p_pin: pin,
   })
-  if (error) return false
+  if (error) throw new Error("login_unavailable")
   return Boolean((data as { ok?: boolean } | null)?.ok)
 }
 
@@ -271,7 +272,7 @@ export async function fetchAllOrders(creds: OwnerCredentials, limit?: number): P
     p_pin: creds.pin,
     p_limit: limit ?? null,
   })
-  if (error) return []
+  if (error) throwOwnerError(error, "orders_load_failed")
   return (data ?? []) as Order[]
 }
 
@@ -346,7 +347,7 @@ export async function updateOrderStatus(
     p_order_id: orderId,
     p_status: status,
   })
-  if (error) throw new Error("update_failed")
+  if (error) throwOwnerError(error, "update_failed")
 }
 
 export async function updateOrderPaymentStatus(
@@ -360,7 +361,7 @@ export async function updateOrderPaymentStatus(
     p_order_id: orderId,
     p_status: paymentStatus,
   })
-  if (error) throw new Error("update_failed")
+  if (error) throwOwnerError(error, "update_failed")
 }
 
 export async function createProduct(
@@ -387,7 +388,7 @@ export async function createProduct(
     p_product: product,
     p_images: imageUrls.filter((url) => url.trim()).map((url) => url.trim()),
   })
-  if (error) throw new Error("save_failed")
+  if (error) throwOwnerError(error, "save_failed")
   invalidateCache("product")
   invalidateCache("products")
   return data as Product
@@ -419,7 +420,7 @@ export async function updateProduct(
     p_product: product,
     p_images: imageUrls.filter((url) => url.trim()).map((url) => url.trim()),
   })
-  if (error) throw new Error("save_failed")
+  if (error) throwOwnerError(error, "save_failed")
   invalidateCache("product")
   invalidateCache("products")
 }
@@ -430,7 +431,7 @@ export async function deleteProduct(creds: OwnerCredentials, productId: string):
     p_pin: creds.pin,
     p_product_id: productId,
   })
-  if (error) throw new Error("delete_failed")
+  if (error) throwOwnerError(error, "delete_failed")
   invalidateCache("product")
   invalidateCache("products")
 }
@@ -444,7 +445,38 @@ export async function updateShopSettings(
     p_pin: creds.pin,
     p_patch: settings,
   })
-  if (error) throw new Error("save_failed")
+  if (error) throwOwnerError(error, "save_failed")
+  invalidateCache("settings")
+}
+
+// Owner screens must show a connection error rather than a demo catalogue.
+export async function fetchOwnerSettings(): Promise<ShopSettings> {
+  const { data, error } = await supabase.from("shop_settings").select(SETTINGS_COLUMNS).limit(1).maybeSingle()
+  if (error) throwOwnerError(error, "settings_load_failed")
+  if (!data) throw new Error("settings_missing")
+  return data as unknown as ShopSettings
+}
+
+export async function fetchOwnerCategories(): Promise<Category[]> {
+  const { data, error } = await supabase.from("categories").select("*").order("sort_order", { ascending: true })
+  if (error) throwOwnerError(error, "categories_load_failed")
+  return (data ?? []) as Category[]
+}
+
+export async function fetchOwnerProducts(): Promise<Product[]> {
+  const { data, error } = await supabase.from("products")
+    .select("*, product_images(*), category:categories(*)").eq("is_active", true)
+    .order("created_at", { ascending: false })
+  if (error) throwOwnerError(error, "products_load_failed")
+  return (data ?? []) as Product[]
+}
+
+export async function fetchOwnerProduct(id: string): Promise<Product> {
+  const { data, error } = await supabase.from("products")
+    .select("*, product_images(*), category:categories(*)").eq("id", id).maybeSingle()
+  if (error) throwOwnerError(error, "product_load_failed")
+  if (!data) throw new Error("product_missing")
+  return data as Product
 }
 
 export function getProductImageUrl(product: Product): string | null {

@@ -1,3 +1,4 @@
+import { throwOwnerError } from "@/lib/owner-errors"
 import { supabase, type ProductReview } from "@/lib/supabase"
 import { cached, invalidateCache } from "@/lib/cache"
 import type { OwnerCredentials } from "@/lib/shop"
@@ -111,18 +112,9 @@ export async function fetchAllReviewsForOwner(
   creds: OwnerCredentials,
   pendingOnly: boolean
 ): Promise<ProductReview[]> {
-  try {
-    const { data, error } = await supabase.rpc("admin_list_reviews", {
-      p_phone: creds.phone,
-      p_pin: creds.pin,
-      p_pending_only: pendingOnly,
-    })
-    if (error) throw error
-    return (data ?? []) as ProductReview[]
-  } catch {
-    const local = readLocal()
-    return pendingOnly ? local.filter((r) => !r.is_approved) : local
-  }
+  const { data, error } = await supabase.rpc("admin_list_reviews", { p_phone: creds.phone, p_pin: creds.pin, p_pending_only: pendingOnly })
+  if (error) throwOwnerError(error, "reviews_load_failed")
+  return (data ?? []) as ProductReview[]
 }
 
 export async function setReviewStatus(
@@ -147,7 +139,7 @@ export async function setReviewStatus(
     p_approved: approved,
     p_verified: verified,
   })
-  if (error) throw new Error("update_failed")
+  if (error) throwOwnerError(error, "update_failed")
   invalidateCache("reviews:")
 }
 
@@ -162,6 +154,6 @@ export async function deleteReview(creds: OwnerCredentials, reviewId: string): P
     p_pin: creds.pin,
     p_review_id: reviewId,
   })
-  if (error) throw new Error("delete_failed")
+  if (error) throwOwnerError(error, "delete_failed")
   invalidateCache("reviews:")
 }

@@ -1,10 +1,11 @@
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
-import { fetchShopSettings, verifyOwnerLogin, type OwnerCredentials } from "@/lib/shop"
+import { fetchOwnerSettings, verifyOwnerLogin, type OwnerCredentials } from "@/lib/shop"
 import type { ShopSettings } from "@/lib/supabase"
 
 type OwnerAuthContextType = {
   isAuthed: boolean
   settings: ShopSettings | null
+  settingsError: boolean
   /** Credentials for privileged calls. The server re-verifies them every time. */
   credentials: OwnerCredentials | null
   login: (phone: string, pin: string) => Promise<boolean>
@@ -34,18 +35,21 @@ export function OwnerAuthProvider({ children }: { children: ReactNode }) {
   // forged local flag no longer grants anything.
   const isAuthed = credentials !== null
   const [settings, setSettings] = useState<ShopSettings | null>(null)
+  const [settingsError, setSettingsError] = useState(false)
 
   const refreshSettings = async () => {
+    setSettingsError(false)
     try {
-      const s = await fetchShopSettings()
+      const s = await fetchOwnerSettings()
       setSettings(s)
     } catch (e) {
-      console.error(e)
+      setSettingsError(true)
+      throw e
     }
   }
 
   useEffect(() => {
-    refreshSettings()
+    void refreshSettings().catch(() => {})
   }, [])
 
   const login = async (phone: string, pin: string): Promise<boolean> => {
@@ -64,7 +68,7 @@ export function OwnerAuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <OwnerAuthContext.Provider value={{ isAuthed, settings, credentials, login, logout, refreshSettings }}>
+    <OwnerAuthContext.Provider value={{ isAuthed, settings, settingsError, credentials, login, logout, refreshSettings }}>
       {children}
     </OwnerAuthContext.Provider>
   )

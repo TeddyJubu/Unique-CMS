@@ -5,3 +5,7 @@ verify_jwt = false
 
 [functions.order-confirmation]
 verify_jwt = false
+
+# The function verifies the shop owner's phone/PIN before signing an upload.
+[functions.owner-photo-upload]
+verify_jwt = false

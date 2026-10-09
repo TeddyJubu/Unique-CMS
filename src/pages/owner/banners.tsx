@@ -1,3 +1,6 @@
+import { PhotoPicker } from "@/components/site/photo-picker"
+import { OwnerError, OwnerConfirmation } from "@/components/site/owner-feedback"
+import { ownerErrorMessage } from "@/lib/owner-errors"
 import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
@@ -26,6 +29,10 @@ export function OwnerBannersPage() {
   const { credentials } = useOwnerAuth()
   const [banners, setBanners] = useState<HomepageBanner[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [photoBusy, setPhotoBusy] = useState(false)
+  const [moving, setMoving] = useState(false)
+  const [removing, setRemoving] = useState<HomepageBanner | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formOpen, setFormOpen] = useState(false)
   const [form, setForm] = useState(emptyForm)
@@ -38,10 +45,11 @@ export function OwnerBannersPage() {
 
   const load = async () => {
     setLoading(true)
+    setError(null)
     try {
       setBanners(await fetchAllBannersForOwner())
     } catch (e) {
-      console.error(e)
+      setError(ownerErrorMessage(e, t("bannersLoadError"), t("ownerSessionError")))
     } finally {
       setLoading(false)
     }
@@ -57,10 +65,8 @@ export function OwnerBannersPage() {
       .then((a) => {
         if (id === annReq.current) setAnn({ text: a.text, text_bn: a.text_bn, enabled: a.enabled })
       })
-      .catch(() => {})
-      .finally(() => {
-        if (id === annReq.current) setAnnLoaded(true)
-      })
+      .then(() => { if (id === annReq.current) setAnnLoaded(true) })
+      .catch(() => { if (id === annReq.current) setError(t("bannersLoadError")) })
   }, [])
 
   const openNew = () => {
@@ -87,7 +93,9 @@ export function OwnerBannersPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!credentials) return
+    if (!credentials || saving || photoBusy) return
+    if (!form.image_url) { setError(t("productPhotoRequired")); return }
+    setError(null)
     setSaving(true)
     try {
       await saveBanner(credentials, {
@@ -107,44 +115,33 @@ export function OwnerBannersPage() {
       load()
     } catch (err) {
       console.error(err)
-      alert(t("error"))
+      setError(ownerErrorMessage(err, t("bannerSaveError"), t("ownerSessionError")))
     } finally {
       setSaving(false)
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!credentials || !confirm(t("areYouSure"))) return
-    try {
-      await deleteBanner(credentials, id)
-      setNotice(t("bannerDeleted"))
-      setTimeout(() => setNotice(null), 2500)
-      load()
-    } catch (e) {
-      console.error(e)
-      alert(t("error"))
-    }
-  }
-
   const move = async (banner: HomepageBanner, dir: -1 | 1) => {
-    if (!credentials) return
+    if (!credentials || moving) return
+    setMoving(true); setError(null)
     const sorted = [...banners].sort((a, b) => a.sort_order - b.sort_order)
     const idx = sorted.findIndex((b) => b.id === banner.id)
     const other = sorted[idx + dir]
-    if (!other) return
+    if (!other) { setMoving(false); return }
     try {
       await saveBanner(credentials, { ...banner, sort_order: other.sort_order })
       await saveBanner(credentials, { ...other, sort_order: banner.sort_order })
       load()
     } catch (e) {
       console.error(e)
-      alert(t("error"))
-    }
+      setError(ownerErrorMessage(e, t("bannerSaveError"), t("ownerSessionError")))
+    } finally { setMoving(false) }
   }
 
   const handleSaveAnnouncement = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!credentials) return
+    if (!credentials || annSaving) return
+    setError(null)
     setAnnSaving(true)
     try {
       await updateShopSettings(credentials, {
@@ -157,7 +154,7 @@ export function OwnerBannersPage() {
       setTimeout(() => setNotice(null), 2500)
     } catch (err) {
       console.error(err)
-      alert(t("error"))
+      setError(ownerErrorMessage(err, t("settingsSaveError"), t("ownerSessionError")))
     } finally {
       setAnnSaving(false)
     }
@@ -168,6 +165,7 @@ export function OwnerBannersPage() {
 
   return (
     <CmsLayout title={t("manageBanners")}>
+      <OwnerError message={error} retry={() => { void load(); void fetchAnnouncementForOwner().then((value) => { setAnn(value); setAnnLoaded(true) }).catch(() => setError(t("bannersLoadError"))) }} />
       {notice && (
         <div className="mb-4 rounded-xl bg-green-50 p-4 text-center text-sm font-medium text-green-700">
           {notice}
@@ -276,19 +274,7 @@ export function OwnerBannersPage() {
               />
             </div>
           </div>
-          <div>
-            <label className="mb-1.5 block text-sm font-medium">{t("bannerImage")}</label>
-            <input
-              type="text"
-              value={form.image_url}
-              onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-              className={inputClass}
-              placeholder="https://... or /kids-hero.webp"
-            />
-            {form.image_url && (
-              <img src={form.image_url} alt="" className="mt-2 h-28 w-full rounded-lg border border-border object-cover" />
-            )}
-          </div>
+          <PhotoPicker label={t("bannerImage")} help={t("chooseBannerPhotoHelp")} max={1} value={form.image_url ? [form.image_url] : []} onChange={(photos) => setForm((current) => ({ ...current, image_url: photos[0] ?? "" }))} onBusyChange={setPhotoBusy} />
           <div>
             <label className="mb-1.5 block text-sm font-medium">{t("bannerLink")}</label>
             <input
@@ -312,7 +298,7 @@ export function OwnerBannersPage() {
             </label>
           </div>
           <div className="flex gap-2">
-            <Button type="submit" disabled={saving} className="flex-1 rounded-xl">
+            <Button type="submit" disabled={saving || photoBusy} className="flex-1 rounded-xl">
               {saving ? t("saving") : t("save")}
             </Button>
             <Button type="button" variant="outline" className="rounded-xl" onClick={() => setFormOpen(false)}>
@@ -358,10 +344,10 @@ export function OwnerBannersPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" className="rounded-lg" aria-label="Move up" onClick={() => move(b, -1)}>
+                  <Button variant="ghost" size="icon" className="rounded-lg" disabled={moving} aria-label="Move up" onClick={() => move(b, -1)}>
                     <ArrowUp className="size-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="rounded-lg" aria-label="Move down" onClick={() => move(b, 1)}>
+                  <Button variant="ghost" size="icon" className="rounded-lg" disabled={moving} aria-label="Move down" onClick={() => move(b, 1)}>
                     <ArrowDown className="size-4" />
                   </Button>
                   <Button variant="ghost" size="icon" className="rounded-lg" aria-label={t("edit")} onClick={() => openEdit(b)}>
@@ -372,7 +358,7 @@ export function OwnerBannersPage() {
                     size="icon"
                     className="rounded-lg text-destructive hover:text-destructive"
                     aria-label={t("delete")}
-                    onClick={() => handleDelete(b.id)}
+                    onClick={() => setRemoving(b)}
                   >
                     <Trash2 className="size-4" />
                   </Button>
@@ -381,6 +367,11 @@ export function OwnerBannersPage() {
             ))}
         </div>
       )}
+      <OwnerConfirmation open={!!removing} onClose={() => setRemoving(null)} title={t("removeBannerTitle", { name: removing?.title ?? t("manageBanners") })} description={t("removeBannerHelp")} actionLabel={t("delete")} destructive errorMessage={t("bannerDeleteError")} onConfirm={async () => {
+        if (!credentials || !removing) throw new Error("owner_session")
+        await deleteBanner(credentials, removing.id)
+        setBanners((items) => items.filter((banner) => banner.id !== removing.id))
+      }} />
     </CmsLayout>
   )
 }

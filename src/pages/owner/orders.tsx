@@ -1,16 +1,9 @@
+import { OrderConfirmation } from "@/components/site/order-confirmation"
+import { OwnerError } from "@/components/site/owner-feedback"
+import { ownerErrorMessage } from "@/lib/owner-errors"
 import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { OrderCard } from "@/pages/owner/dashboard"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { fetchAllOrders, updateOrderStatus, updateOrderPaymentStatus } from "@/lib/shop"
 import { useOwnerAuth } from "@/lib/owner-auth"
 import type { Order } from "@/lib/supabase"
@@ -23,17 +16,19 @@ export function OwnerOrdersPage() {
   const { credentials } = useOwnerAuth()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<string>("all")
   const [confirmAction, setConfirmAction] = useState<{ type: string; orderId: string } | null>(null)
 
   const load = async () => {
     setLoading(true)
+    setError(null)
     try {
       if (!credentials) return
       const data = await fetchAllOrders(credentials)
       setOrders(data)
     } catch (e) {
-      console.error(e)
+      setError(ownerErrorMessage(e, t("ordersLoadError"), t("ownerSessionError")))
     } finally {
       setLoading(false)
     }
@@ -44,17 +39,17 @@ export function OwnerOrdersPage() {
   const filtered = filter === "all" ? orders : orders.filter((o) => o.status === filter)
 
   const handleStatusUpdate = async (orderId: string, status: Order["status"]) => {
-    if (!credentials) return
+    if (!credentials) throw new Error("owner_session")
     await updateOrderStatus(credentials, orderId, status)
     setConfirmAction(null)
-    load()
+    void load()
   }
 
   const handleMarkPaid = async (orderId: string) => {
-    if (!credentials) return
+    if (!credentials) throw new Error("owner_session")
     await updateOrderPaymentStatus(credentials, orderId, "paid")
     setConfirmAction(null)
-    load()
+    void load()
   }
 
   const filters = [
@@ -68,6 +63,7 @@ export function OwnerOrdersPage() {
 
   return (
     <CmsLayout title={t("allOrders")}>
+      <OwnerError message={error} retry={() => void load()} />
       {/* Filter pills */}
       <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
         {filters.map((f) => (
@@ -90,7 +86,7 @@ export function OwnerOrdersPage() {
         <div className="flex items-center justify-center py-12">
           <span className="text-sm text-muted-foreground">{t("loading")}</span>
         </div>
-      ) : filtered.length === 0 ? (
+      ) : error ? null : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card py-12">
           <Package className="size-10 text-muted-foreground" strokeWidth={1} />
           <p className="mt-3 text-sm text-muted-foreground">{t("noOrdersYet")}</p>
@@ -109,36 +105,15 @@ export function OwnerOrdersPage() {
         </div>
       )}
 
-      <AlertDialog open={!!confirmAction} onOpenChange={(open) => !open && setConfirmAction(null)}>
-        <AlertDialogContent className="rounded-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-lg font-bold">{t("areYouSure")}</AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-muted-foreground">
-              {confirmAction?.type === "confirm" && t("confirm")}
-              {confirmAction?.type === "ship" && t("ship")}
-              {confirmAction?.type === "deliver" && t("deliver")}
-              {confirmAction?.type === "cancel" && t("cancel")}
-              {confirmAction?.type === "markPaid" && t("markPaid")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl">{t("no")}</AlertDialogCancel>
-            <AlertDialogAction
-              className="rounded-xl"
-              onClick={() => {
-                if (!confirmAction) return
-                if (confirmAction.type === "confirm") handleStatusUpdate(confirmAction.orderId, "confirmed")
-                else if (confirmAction.type === "ship") handleStatusUpdate(confirmAction.orderId, "shipped")
-                else if (confirmAction.type === "deliver") handleStatusUpdate(confirmAction.orderId, "delivered")
-                else if (confirmAction.type === "cancel") handleStatusUpdate(confirmAction.orderId, "cancelled")
-                else if (confirmAction.type === "markPaid") handleMarkPaid(confirmAction.orderId)
-              }}
-            >
-              {t("yes")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <OrderConfirmation action={confirmAction?.type ?? null} order={orders.find((order) => order.id === confirmAction?.orderId)} onClose={() => setConfirmAction(null)} onConfirm={async () => {
+        if (!confirmAction) return
+        const { type, orderId } = confirmAction
+        if (type === "markPaid") await handleMarkPaid(orderId)
+        else {
+          const statuses: Record<string, Order["status"]> = { confirm: "confirmed", ship: "shipped", deliver: "delivered", cancel: "cancelled" }
+          if (statuses[type]) await handleStatusUpdate(orderId, statuses[type])
+        }
+      }} />
     </CmsLayout>
   )
 }

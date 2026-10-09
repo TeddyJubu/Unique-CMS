@@ -1,3 +1,5 @@
+import { OwnerError, OwnerConfirmation } from "@/components/site/owner-feedback"
+import { ownerErrorMessage } from "@/lib/owner-errors"
 import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { Button } from "@/components/ui/button"
@@ -14,15 +16,19 @@ export function OwnerReviewsPage() {
   const { credentials } = useOwnerAuth()
   const [reviews, setReviews] = useState<ProductReview[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [removing, setRemoving] = useState<ProductReview | null>(null)
+  const [busy, setBusy] = useState(false)
   const [pendingOnly, setPendingOnly] = useState(true)
 
   const load = async () => {
     if (!credentials) return
     setLoading(true)
+    setError(null)
     try {
       setReviews(await fetchAllReviewsForOwner(credentials, pendingOnly))
     } catch (e) {
-      console.error(e)
+      setError(ownerErrorMessage(e, t("reviewsLoadError"), t("ownerSessionError")))
     } finally {
       setLoading(false)
     }
@@ -34,29 +40,21 @@ export function OwnerReviewsPage() {
   }, [pendingOnly])
 
   const handleStatus = async (r: ProductReview, approved: boolean, verified: boolean) => {
-    if (!credentials) return
+    if (!credentials || busy) return
+    setBusy(true); setError(null)
     try {
       await setReviewStatus(credentials, r.id, approved, verified)
       load()
     } catch (e) {
       console.error(e)
-      alert(t("error"))
-    }
+      setError(ownerErrorMessage(e, t("reviewUpdateError"), t("ownerSessionError")))
+    } finally { setBusy(false) }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!credentials || !confirm(t("areYouSure"))) return
-    try {
-      await deleteReview(credentials, id)
-      load()
-    } catch (e) {
-      console.error(e)
-      alert(t("error"))
-    }
-  }
 
   return (
     <CmsLayout title={t("manageReviews")}>
+      <OwnerError message={error} retry={() => void load()} />
       <div className="mb-5 flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           {reviews.length} {t("reviews").toLowerCase()}
@@ -76,7 +74,7 @@ export function OwnerReviewsPage() {
         <div className="flex items-center justify-center py-12">
           <span className="text-sm text-muted-foreground">{t("loading")}</span>
         </div>
-      ) : reviews.length === 0 ? (
+      ) : error ? null : reviews.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card py-12">
           <Star className="size-10 text-muted-foreground" strokeWidth={1} />
           <p className="mt-3 text-sm text-muted-foreground">{t("noPendingReviews")}</p>
@@ -100,7 +98,7 @@ export function OwnerReviewsPage() {
                   )}
                 </div>
                 <button
-                  onClick={() => handleDelete(r.id)}
+                  onClick={() => setRemoving(r)} disabled={busy}
                   aria-label={t("delete")}
                   className="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-destructive"
                 >
@@ -138,7 +136,7 @@ export function OwnerReviewsPage() {
                     size="sm"
                     variant="outline"
                     className="min-h-10 rounded-lg"
-                    onClick={() => handleStatus(r, false, r.is_verified)}
+                    disabled={busy} onClick={() => handleStatus(r, false, r.is_verified)}
                   >
                     <EyeOff className="size-4" /> {t("unapprove")}
                   </Button>
@@ -146,7 +144,7 @@ export function OwnerReviewsPage() {
                   <Button
                     size="sm"
                     className="min-h-10 rounded-lg"
-                    onClick={() => handleStatus(r, true, r.is_verified)}
+                    disabled={busy} onClick={() => handleStatus(r, true, r.is_verified)}
                   >
                     <Check className="size-4" /> {t("approve")}
                   </Button>
@@ -155,7 +153,7 @@ export function OwnerReviewsPage() {
                   size="sm"
                   variant="outline"
                   className={cn("min-h-10 rounded-lg", r.is_verified && "border-primary text-primary")}
-                  onClick={() => handleStatus(r, r.is_approved, !r.is_verified)}
+                  disabled={busy} onClick={() => handleStatus(r, r.is_approved, !r.is_verified)}
                 >
                   <BadgeCheck className="size-4" /> {t("markVerified")}
                 </Button>
@@ -164,6 +162,11 @@ export function OwnerReviewsPage() {
           ))}
         </div>
       )}
+      <OwnerConfirmation open={!!removing} onClose={() => setRemoving(null)} title={t("removeReviewTitle", { name: removing?.customer_name ?? "" })} description={t("removeReviewHelp")} actionLabel={t("delete")} destructive errorMessage={t("reviewUpdateError")} onConfirm={async () => {
+        if (!credentials || !removing) throw new Error("owner_session")
+        await deleteReview(credentials, removing.id)
+        setReviews((items) => items.filter((review) => review.id !== removing.id))
+      }} />
     </CmsLayout>
   )
 }

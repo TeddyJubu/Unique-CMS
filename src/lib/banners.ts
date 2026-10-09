@@ -1,5 +1,6 @@
 import { supabase, type HomepageBanner } from "@/lib/supabase"
 import { cached, invalidateCache } from "@/lib/cache"
+import { throwOwnerError } from "@/lib/owner-errors"
 import type { OwnerCredentials } from "@/lib/shop"
 
 const LOCAL_KEY = "ucp-banners"
@@ -43,16 +44,9 @@ export async function fetchActiveBanners(): Promise<HomepageBanner[]> {
 }
 
 export async function fetchAllBannersForOwner(): Promise<HomepageBanner[]> {
-  try {
-    const { data, error } = await supabase
-      .from("homepage_banners")
-      .select("*")
-      .order("sort_order", { ascending: true })
-    if (error) throw error
-    return (data ?? []) as HomepageBanner[]
-  } catch {
-    return (readLocal() ?? []).sort(bySort)
-  }
+  const { data, error } = await supabase.from("homepage_banners").select("*").order("sort_order", { ascending: true })
+  if (error) throwOwnerError(error, "banners_load_failed")
+  return (data ?? []) as HomepageBanner[]
 }
 
 export async function saveBanner(
@@ -70,30 +64,8 @@ export async function saveBanner(
     sort_order: Number.isFinite(banner.sort_order) ? banner.sort_order! : 0,
     is_active: banner.is_active ?? true,
   }
-  try {
-    const { error } = await supabase.rpc("admin_save_banner", {
-      p_phone: creds.phone,
-      p_pin: creds.pin,
-      p_banner: payload,
-    })
-    if (error) throw error
-  } catch (e) {
-    // Pre-migration fallback: persist locally so the owner can still manage content.
-    // Auth/validation failures must still surface instead of silently going local.
-    const msg = (e as { message?: string })?.message ?? ""
-    if (/unauthorized|invalid_|permission denied/i.test(msg)) throw new Error("save_failed")
-    const local = readLocal() ?? []
-    if (payload.id) {
-      writeLocal(local.map((b) => (b.id === payload.id ? { ...b, ...payload } as HomepageBanner : b)))
-    } else {
-      const created: HomepageBanner = {
-        ...(payload as Omit<HomepageBanner, "id" | "created_at">),
-        id: `local-${crypto.randomUUID()}`,
-        created_at: new Date().toISOString(),
-      }
-      writeLocal([...local, created])
-    }
-  }
+  const { error } = await supabase.rpc("admin_save_banner", { p_phone: creds.phone, p_pin: creds.pin, p_banner: payload })
+  if (error) throwOwnerError(error, "save_failed")
   invalidateCache("banners:")
 }
 
@@ -103,16 +75,8 @@ export async function deleteBanner(creds: OwnerCredentials, bannerId: string): P
     invalidateCache("banners:")
     return
   }
-  try {
-    const { error } = await supabase.rpc("admin_delete_banner", {
-      p_phone: creds.phone,
-      p_pin: creds.pin,
-      p_banner_id: bannerId,
-    })
-    if (error) throw error
-  } catch {
-    writeLocal((readLocal() ?? []).filter((b) => b.id !== bannerId))
-  }
+  const { error } = await supabase.rpc("admin_delete_banner", { p_phone: creds.phone, p_pin: creds.pin, p_banner_id: bannerId })
+  if (error) throwOwnerError(error, "delete_failed")
   invalidateCache("banners:")
 }
 
@@ -120,26 +84,10 @@ export async function deleteBanner(creds: OwnerCredentials, bannerId: string): P
  *  The shared settings object never carries these columns, so the admin UI
  *  must read them here — never from OwnerAuth settings. */
 export async function fetchAnnouncementForOwner(): Promise<Announcement> {
-  try {
-    const { data, error } = await supabase
-      .from("shop_settings")
-      .select("announcement_text, announcement_text_bn, announcement_enabled")
-      .limit(1)
-      .maybeSingle()
-    if (error || !data) return { text: "", text_bn: "", enabled: false }
-    const row = data as unknown as {
-      announcement_text: string
-      announcement_text_bn: string
-      announcement_enabled: boolean
-    }
-    return {
-      text: row.announcement_text ?? "",
-      text_bn: row.announcement_text_bn ?? "",
-      enabled: row.announcement_enabled ?? false,
-    }
-  } catch {
-    return { text: "", text_bn: "", enabled: false }
-  }
+  const { data, error } = await supabase.from("shop_settings")
+    .select("announcement_text, announcement_text_bn, announcement_enabled").limit(1).maybeSingle()
+  if (error || !data) throw new Error("announcement_load_failed")
+  return { text: data.announcement_text ?? "", text_bn: data.announcement_text_bn ?? "", enabled: data.announcement_enabled ?? false }
 }
 
 /** Announcement bar content. Separate best-effort query so older DBs without
