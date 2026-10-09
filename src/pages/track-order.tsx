@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
+import { useCustomer } from "@/lib/customer-auth"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { fetchOrdersByPhone, formatPrice } from "@/lib/shop"
@@ -22,10 +23,24 @@ const paymentColors: Record<Order["payment_status"], string> = {
 
 export function TrackOrderPage() {
   const { t, locale } = useI18n()
+  const { customer } = useCustomer()
   const [phone, setPhone] = useState("")
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
+
+  useEffect(() => {
+    if (customer && !searched) {
+      setPhone(customer.phone)
+      setLoading(true)
+      setSearched(true)
+      fetchOrdersByPhone(customer.phone)
+        .then(setOrders)
+        .catch(console.error)
+        .finally(() => setLoading(false))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customer])
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()

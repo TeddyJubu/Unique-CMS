@@ -31,6 +31,8 @@ export type Product = {
   sizes: string[]
   colors: string[]
   stock: number
+  /** Per-variant qty keyed by "size|color" ("" for a missing dimension). Absent/empty = total-stock mode. */
+  variant_stock?: Record<string, number> | null
   is_featured: boolean
   is_active: boolean
   sort_order: number
@@ -98,6 +100,46 @@ export type ShopSettings = {
 
   ai_api_url?: string | null
   ai_model?: string | null
+  announcement_text?: string | null
+  announcement_text_bn?: string | null
+  announcement_enabled?: boolean | null
+}
+
+export type ProductReview = {
+  id: string
+  product_id: string
+  customer_name: string
+  customer_phone?: string | null
+  rating: number
+  title: string | null
+  body: string
+  photos: string[]
+  is_approved: boolean
+  is_verified: boolean
+  created_at: string
+  product_name?: string
+}
+
+export type HomepageBanner = {
+  id: string
+  title: string
+  title_bn: string
+  subtitle: string
+  subtitle_bn: string
+  image_url: string
+  link_url: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
+}
+
+export type CustomerProfile = {
+  phone: string
+  name: string
+  address: string | null
+  district: string | null
+  area_type: "inside_dhaka" | "outside_dhaka"
+  updated_at?: string
 }
 
 export type CartItem = {

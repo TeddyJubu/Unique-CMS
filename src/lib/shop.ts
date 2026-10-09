@@ -155,7 +155,7 @@ export async function fetchProducts(filters?: {
   return cached(cacheKey, async () => {
     let query = supabase
     .from("products")
-    .select("*, product_images(*), category(*)")
+    .select("*, product_images(*), category:categories(*)")
     .eq("is_active", true)
 
   if (filters?.categoryId) {
@@ -216,7 +216,7 @@ export async function fetchProduct(id: string): Promise<Product | null> {
   return cached(`product:${id}`, async () => {
     const { data, error } = await supabase
     .from("products")
-    .select("*, product_images(*), category(*)")
+    .select("*, product_images(*), category:categories(*)")
     .eq("id", id)
     .maybeSingle()
   if (error) return productCatalog.find((p) => p.id === id) ?? null
@@ -376,6 +376,7 @@ export async function createProduct(
     sizes: string[]
     colors: string[]
     stock: number
+    variant_stock?: Record<string, number>
     is_featured: boolean
   },
   imageUrls: string[]
@@ -406,6 +407,7 @@ export async function updateProduct(
     sizes: string[]
     colors: string[]
     stock: number
+    variant_stock?: Record<string, number>
     is_featured: boolean
   },
   imageUrls: string[]

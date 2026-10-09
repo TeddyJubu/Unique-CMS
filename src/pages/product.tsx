@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { useRouter, navigate } from "@/lib/router"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ProductGrid } from "@/components/site/product-card"
+import { ImageLightbox } from "@/components/site/image-lightbox"
+import { ProductReviews, RatingStars, useReviewSummary } from "@/components/site/product-reviews"
 import { fetchProduct, fetchProducts, formatPrice, getWhatsAppOrderMessage } from "@/lib/shop"
 import { setSeo } from "@/lib/seo"
 import { useCart } from "@/lib/cart"
 import { fetchShopSettings } from "@/lib/shop"
 import type { Product, ShopSettings } from "@/lib/supabase"
-import { ShoppingBag, MessageCircle, Minus, Plus, ArrowLeft, Check } from "lucide-react"
+import {
+  getVariantStock,
+  getSizeStock,
+  getColorStock,
+  getTotalStock,
+  hasVariantStock,
+} from "@/lib/variants"
+import { ShoppingBag, MessageCircle, Minus, Plus, ArrowLeft, Check, ZoomIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function ProductPage() {
@@ -25,7 +34,9 @@ export function ProductPage() {
   const [selectedColor, setSelectedColor] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const [added, setAdded] = useState(false)
+  const summary = useReviewSummary(productId)
 
   useEffect(() => {
     async function load() {
@@ -40,6 +51,8 @@ export function ProductPage() {
         if (p) {
           setSelectedSize(p.sizes[0] || "")
           setSelectedColor(p.colors[0] || "")
+          setQuantity(1)
+          setActiveImage(0)
           const relatedProducts = await fetchProducts({ categoryId: p.category_id || undefined })
           setRelated(relatedProducts.filter((rp) => rp.id !== p.id).slice(0, 4))
         }
@@ -63,10 +76,25 @@ export function ProductPage() {
     }
   }, [product])
 
+  const variant = useMemo(() => {
+    if (!product) return null
+    const tracked = hasVariantStock(product)
+    const total = getTotalStock(product)
+    const selectedStock = tracked
+      ? getVariantStock(product, selectedSize || null, selectedColor || null)
+      : total
+    return { tracked, total, selectedStock }
+  }, [product, selectedSize, selectedColor])
+
+  useEffect(() => {
+    if (variant) setQuantity((q) => Math.min(Math.max(1, q), Math.max(1, variant.selectedStock)))
+  }, [variant?.selectedStock])
+
   const handleAddToCart = () => {
-    if (!product) return
+    if (!product || !variant) return
     if (product.sizes.length > 0 && !selectedSize) return
     if (product.colors.length > 0 && !selectedColor) return
+    if (variant.selectedStock <= 0) return
     addItem({
       product_id: product.id,
       name: product.name,
@@ -75,8 +103,8 @@ export function ProductPage() {
       image_url: product.product_images?.[0]?.image_url ?? null,
       size: selectedSize || "N/A",
       color: selectedColor || "N/A",
-      quantity,
-      stock: product.stock,
+      quantity: Math.min(quantity, variant.selectedStock),
+      stock: variant.selectedStock,
     })
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
@@ -103,7 +131,7 @@ export function ProductPage() {
     )
   }
 
-  if (!product) {
+  if (!product || !variant) {
     return (
       <div className="flex flex-col items-center justify-center pt-32">
         <p className="text-sm uppercase text-muted-foreground">{t("noProducts")}</p>
@@ -117,8 +145,10 @@ export function ProductPage() {
   const name = locale === "bn" && product.name_bn ? product.name_bn : product.name
   const description = locale === "bn" && product.description_bn ? product.description_bn : product.description
   const images = product.product_images || []
+  const imageUrls = images.map((i) => i.image_url)
   const hasDiscount = product.compare_price && product.compare_price > product.price
-  const inStock = product.stock > 0
+  const inStock = variant.total > 0
+  const comboAvailable = variant.selectedStock > 0
 
   return (
     <div className="pt-16">
@@ -133,7 +163,11 @@ export function ProductPage() {
         <div className="grid gap-6 md:grid-cols-2 md:gap-8">
           {/* Images */}
           <div className="flex flex-col gap-3">
-            <div className="relative aspect-[3/4] overflow-hidden border border-border bg-muted">
+            <button
+              className="group relative block aspect-[3/4] w-full cursor-zoom-in overflow-hidden border border-border bg-muted text-left"
+              onClick={() => images.length > 0 && setLightboxOpen(true)}
+              aria-label={t("clickToZoom")}
+            >
               {images.length > 0 ? (
                 <img
                   src={images[activeImage]?.image_url}
@@ -141,22 +175,28 @@ export function ProductPage() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center">
+                <span className="flex h-full w-full items-center justify-center">
                   <span className="text-xs uppercase text-muted-foreground">No image</span>
-                </div>
+                </span>
+              )}
+              {images.length > 0 && (
+                <span className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-background/85 px-2.5 py-1.5 text-[11px] font-medium uppercase tracking-wider text-foreground opacity-0 transition-opacity group-hover:opacity-100">
+                  <ZoomIn className="size-3.5" /> {t("clickToZoom")}
+                </span>
               )}
               {hasDiscount && (
                 <Badge className="absolute right-3 top-3 bg-primary px-3 py-1.5 text-xs font-bold uppercase text-primary-foreground">
                   -{Math.round(((product.compare_price! - product.price) / product.compare_price!) * 100)}% {t("off")}
                 </Badge>
               )}
-            </div>
+            </button>
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
                 {images.map((img, i) => (
                   <button
                     key={img.id}
                     onClick={() => setActiveImage(i)}
+                    aria-label={`${name} ${i + 1}`}
                     className={cn(
                       "size-16 shrink-0 overflow-hidden border-2",
                       activeImage === i ? "border-primary" : "border-border"
@@ -183,6 +223,17 @@ export function ProductPage() {
                   {locale === "bn" && product.category.name_bn ? product.category.name_bn : product.category.name}
                 </button>
               )}
+              {summary && summary.count > 0 && (
+                <button
+                  onClick={() => document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" })}
+                  className="mt-2 flex items-center gap-2"
+                >
+                  <RatingStars value={summary.average} />
+                  <span className="text-sm text-muted-foreground underline-offset-2 hover:underline">
+                    {summary.average.toFixed(1)} ({summary.count})
+                  </span>
+                </button>
+              )}
             </div>
 
             <div className="flex items-baseline gap-3">
@@ -202,8 +253,8 @@ export function ProductPage() {
                   <Badge variant="outline" className="border-primary text-primary">
                     <Check className="size-3" /> {t("inStock")}
                   </Badge>
-                  {product.stock <= 5 && (
-                    <span className="text-xs text-primary">{t("lowStock", { n: product.stock })}</span>
+                  {variant.total <= 5 && (
+                    <span className="text-xs text-primary">{t("lowStock", { n: variant.total })}</span>
                   )}
                 </>
               ) : (
@@ -220,21 +271,27 @@ export function ProductPage() {
                   {t("selectSize")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setSelectedSize(s)}
-                      disabled={!inStock}
-                      className={cn(
-                        "min-w-12 border px-4 py-2 text-sm uppercase transition-colors disabled:opacity-50",
-                        selectedSize === s
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-foreground/70 hover:border-primary"
-                      )}
-                    >
-                      {s}
-                    </button>
-                  ))}
+                  {product.sizes.map((s) => {
+                    const sStock = getSizeStock(product, s)
+                    const disabled = variant.tracked && sStock <= 0
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => setSelectedSize(s)}
+                        disabled={disabled || !inStock}
+                        aria-label={disabled ? `${s} — ${t("soldOut")}` : s}
+                        className={cn(
+                          "min-w-12 border px-4 py-2 text-sm uppercase transition-colors disabled:cursor-not-allowed",
+                          selectedSize === s
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-foreground/70 hover:border-primary",
+                          disabled && "bg-muted text-muted-foreground/60 line-through hover:border-border"
+                        )}
+                      >
+                        {s}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             )}
@@ -246,23 +303,40 @@ export function ProductPage() {
                   {t("selectColor")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {product.colors.map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => setSelectedColor(c)}
-                      disabled={!inStock}
-                      className={cn(
-                        "border px-4 py-2 text-sm uppercase transition-colors disabled:opacity-50",
-                        selectedColor === c
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-foreground/70 hover:border-primary"
-                      )}
-                    >
-                      {c}
-                    </button>
-                  ))}
+                  {product.colors.map((c) => {
+                    const cStock = getColorStock(product, c)
+                    const disabled = variant.tracked && cStock <= 0
+                    return (
+                      <button
+                        key={c}
+                        onClick={() => setSelectedColor(c)}
+                        disabled={disabled || !inStock}
+                        aria-label={disabled ? `${c} — ${t("soldOut")}` : c}
+                        className={cn(
+                          "border px-4 py-2 text-sm uppercase transition-colors disabled:cursor-not-allowed",
+                          selectedColor === c
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-foreground/70 hover:border-primary",
+                          disabled && "bg-muted text-muted-foreground/60 line-through hover:border-border"
+                        )}
+                      >
+                        {c}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
+            )}
+
+            {variant.tracked && inStock && !comboAvailable && (
+              <p className="text-sm font-medium text-destructive" role="status">
+                {t("combinationOutOfStock")}
+              </p>
+            )}
+            {variant.tracked && comboAvailable && variant.selectedStock <= 5 && (
+              <p className="text-xs text-primary">
+                {t("lowStock", { n: variant.selectedStock })}
+              </p>
             )}
 
             {/* Quantity */}
@@ -273,15 +347,17 @@ export function ProductPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1 || !inStock}
+                  disabled={quantity <= 1 || !comboAvailable}
+                  aria-label="Decrease quantity"
                   className="flex size-10 items-center justify-center border border-border text-foreground hover:border-primary disabled:opacity-50"
                 >
                   <Minus className="size-4" />
                 </button>
                 <span className="w-12 text-center text-lg font-bold">{quantity}</span>
                 <button
-                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  disabled={quantity >= product.stock || !inStock}
+                  onClick={() => setQuantity(Math.min(variant.selectedStock, quantity + 1))}
+                  disabled={quantity >= variant.selectedStock || !comboAvailable}
+                  aria-label="Increase quantity"
                   className="flex size-10 items-center justify-center border border-border text-foreground hover:border-primary disabled:opacity-50"
                 >
                   <Plus className="size-4" />
@@ -295,7 +371,7 @@ export function ProductPage() {
                 size="lg"
                 className="flex-1 text-sm font-bold uppercase tracking-wider"
                 onClick={handleAddToCart}
-                disabled={!inStock}
+                disabled={!comboAvailable}
               >
                 {added ? <><Check className="size-4" /> {t("addToCart")}</> : <><ShoppingBag className="size-4" /> {t("addToCart")}</>}
               </Button>
@@ -321,6 +397,9 @@ export function ProductPage() {
           </div>
         </div>
 
+        {/* Reviews */}
+        <ProductReviews productId={product.id} />
+
         {/* Related */}
         {related.length > 0 && (
           <section className="mt-16">
@@ -331,6 +410,16 @@ export function ProductPage() {
           </section>
         )}
       </div>
+
+      {lightboxOpen && images.length > 0 && (
+        <ImageLightbox
+          images={imageUrls}
+          index={activeImage}
+          alt={name}
+          onClose={() => setLightboxOpen(false)}
+          onIndexChange={setActiveImage}
+        />
+      )}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { type ReactNode } from "react"
 import { useI18n } from "@/lib/i18n"
 import { useOwnerAuth } from "@/lib/owner-auth"
 import { navigate, useRouter } from "@/lib/router"
-import { Home, ShoppingBag, Plus, Tag, Settings, LogOut, ArrowLeft, Sparkles } from "lucide-react"
+import { Home, ShoppingBag, Plus, Tag, Settings, LogOut, ArrowLeft, Sparkles, Star, Image } from "lucide-react"
 import { AssistantChat } from "@/components/site/assistant-chat"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -18,6 +18,8 @@ export function CmsLayout({ children, title }: { children: ReactNode; title?: st
     { icon: ShoppingBag, label: t("allOrders"), path: "/owner/orders" },
     { icon: Plus, label: t("newPost"), path: "/owner/post" },
     { icon: Tag, label: t("myProducts"), path: "/owner/products" },
+    { icon: Star, label: t("manageReviews"), path: "/owner/reviews" },
+    { icon: Image, label: t("manageBanners"), path: "/owner/banners" },
     { icon: Settings, label: t("settings"), path: "/owner/settings" },
   ]
 

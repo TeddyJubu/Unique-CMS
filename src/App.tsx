@@ -3,10 +3,12 @@ import { I18nProvider } from "@/lib/i18n"
 import { CartProvider } from "@/lib/cart"
 import { WishlistProvider } from "@/lib/wishlist"
 import { OwnerAuthProvider } from "@/lib/owner-auth"
+import { CustomerAuthProvider } from "@/lib/customer-auth"
 import { useRouter } from "@/lib/router"
 import { SiteHeader } from "@/components/site/site-header"
 import { SiteFooter } from "@/components/site/site-footer"
 import { CustomerChat } from "@/components/site/customer-chat"
+import { AnnouncementBar } from "@/components/site/announcement-bar"
 import { HomePage } from "@/pages/home"
 import { ShopPage, CategoryPage } from "@/pages/shop"
 import { ProductPage } from "@/pages/product"
@@ -14,12 +16,15 @@ import { CartPage } from "@/pages/cart"
 import { WishlistPage } from "@/pages/wishlist"
 import { CheckoutPage } from "@/pages/checkout"
 import { TrackOrderPage } from "@/pages/track-order"
+import { AccountPage } from "@/pages/account"
 import { OwnerLoginPage } from "@/pages/owner/login"
 import { OwnerDashboard } from "@/pages/owner/dashboard"
 import { OwnerOrdersPage } from "@/pages/owner/orders"
 import { OwnerProductsPage, OwnerProductFormPage } from "@/pages/owner/products"
 import { OwnerSettingsPage } from "@/pages/owner/settings"
 import { OwnerStudioPage } from "@/pages/owner/studio"
+import { OwnerReviewsPage } from "@/pages/owner/reviews"
+import { OwnerBannersPage } from "@/pages/owner/banners"
 import { fetchCategories, fetchShopSettings, fetchProducts } from "@/lib/shop"
 import { generateWebMCPManifest, generateStructuredData } from "@/lib/webmcp"
 import type { Category, ShopSettings } from "@/lib/supabase"
@@ -28,6 +33,7 @@ import { useOwnerAuth } from "@/lib/owner-auth"
 function StoreLayout({ children }: { children: React.ReactNode }) {
   const [categories, setCategories] = useState<Category[]>([])
   const [settings, setSettings] = useState<ShopSettings | null>(null)
+  const [annVisible, setAnnVisible] = useState(false)
 
   useEffect(() => {
     Promise.all([fetchCategories(), fetchShopSettings()])
@@ -40,8 +46,9 @@ function StoreLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="site-shell flex min-h-svh flex-col bg-background">
-      <SiteHeader categories={categories} settings={settings} />
-      <main className="flex-1">{children}</main>
+      <AnnouncementBar onVisibility={setAnnVisible} />
+      <SiteHeader categories={categories} settings={settings} topOffset={annVisible ? 36 : 0} />
+      <main className={`flex-1 ${annVisible ? "pt-9" : ""}`}>{children}</main>
       <SiteFooter categories={categories} settings={settings} />
       <CustomerChat />
     </div>
@@ -106,6 +113,20 @@ function AppRoutes() {
         </OwnerRouteGuard>
       )
     }
+    if (route.path === "/owner/reviews") {
+      return (
+        <OwnerRouteGuard>
+          <OwnerReviewsPage />
+        </OwnerRouteGuard>
+      )
+    }
+    if (route.path === "/owner/banners") {
+      return (
+        <OwnerRouteGuard>
+          <OwnerBannersPage />
+        </OwnerRouteGuard>
+      )
+    }
     return <OwnerLoginPage />
   }
 
@@ -135,6 +156,9 @@ function AppRoutes() {
       break
     case "/track-order":
       page = <TrackOrderPage />
+      break
+    case "/account":
+      page = <AccountPage />
       break
     default:
       page = <HomePage />
@@ -187,10 +211,12 @@ function App() {
     <I18nProvider>
       <WishlistProvider>
         <CartProvider>
-          <OwnerAuthProvider>
-            <WebMCPInjector />
-            <AppRoutes />
-          </OwnerAuthProvider>
+          <CustomerAuthProvider>
+            <OwnerAuthProvider>
+              <WebMCPInjector />
+              <AppRoutes />
+            </OwnerAuthProvider>
+          </CustomerAuthProvider>
         </CartProvider>
       </WishlistProvider>
     </I18nProvider>

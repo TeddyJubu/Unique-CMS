@@ -53,7 +53,8 @@ function getCustomerChatKey(): string {
 
 export async function checkCustomerAssistant(): Promise<{ configured: boolean; shopName?: string }> {
   const { data, error } = await supabase.functions.invoke("assistant-bridge", {
-    body: { action: "status", mode: "customer" },
+    // The bridge requires chatKey on every customer action, including status.
+    body: { action: "status", mode: "customer", chatKey: getCustomerChatKey() },
   })
   if (error) return { configured: false }
   return { configured: Boolean((data as any)?.configured), shopName: (data as any)?.shopName }

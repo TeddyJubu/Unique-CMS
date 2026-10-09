@@ -7,8 +7,10 @@ import { ProductGrid } from "@/components/site/product-card"
 import { ServicePromises } from "@/components/site/service-promises"
 import { ArrowRight } from "lucide-react"
 import { fetchProducts, fetchCategories, fetchShopSettings } from "@/lib/shop"
+import { fetchActiveBanners } from "@/lib/banners"
+import { HeroCarousel } from "@/components/site/hero-carousel"
 import { setSeo } from "@/lib/seo"
-import type { Product, Category, ShopSettings } from "@/lib/supabase"
+import type { Product, Category, ShopSettings, HomepageBanner } from "@/lib/supabase"
 
 export function HomePage() {
   const { locale, t } = useI18n()
@@ -16,20 +18,23 @@ export function HomePage() {
   const [newArrivals, setNewArrivals] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [settings, setSettings] = useState<ShopSettings | null>(null)
+  const [banners, setBanners] = useState<HomepageBanner[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
       try {
-        const [latest, c, s] = await Promise.all([
+        const [latest, c, s, b] = await Promise.all([
           fetchProducts({ sort: "newest" }),
           fetchCategories(),
           fetchShopSettings(),
+          fetchActiveBanners(),
         ])
         setFeatured(latest.slice(0, 8))
         setNewArrivals(latest.slice(8, 16))
         setCategories(c)
         setSettings(s)
+        setBanners(b)
       } catch (e) {
         console.error(e)
       } finally {
@@ -61,33 +66,37 @@ export function HomePage() {
   return (
     <div className="pt-16">
       {/* Hero */}
-      <section className="relative min-h-[60vh] overflow-hidden md:min-h-[80vh]">
-        <img
-          src={heroImage}
-          alt="Unique Collection kids collection"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/20" />
-        <div className="relative flex min-h-[60vh] flex-col justify-end p-6 md:min-h-[80vh] md:p-16">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-extrabold uppercase leading-none tracking-tight text-foreground md:text-7xl">
-              {heroTitle}
-            </h1>
-            <p className="mt-4 text-sm text-foreground/70 md:text-lg">
-              {heroSubtitle}
-            </p>
-            <div className="mt-6 flex gap-3">
-              <Button
-                size="lg"
-                className="text-sm font-bold uppercase tracking-wider"
-                onClick={() => navigate("/shop")}
-              >
-                {t("shopNow")} <ArrowRight className="size-4" />
-              </Button>
+      {banners.length > 0 ? (
+        <HeroCarousel banners={banners} />
+      ) : (
+        <section className="relative min-h-[60vh] overflow-hidden md:min-h-[80vh]">
+          <img
+            src={heroImage}
+            alt="Unique Collection kids collection"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/20" />
+          <div className="relative flex min-h-[60vh] flex-col justify-end p-6 md:min-h-[80vh] md:p-16">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl font-extrabold uppercase leading-none tracking-tight text-foreground md:text-7xl">
+                {heroTitle}
+              </h1>
+              <p className="mt-4 text-sm text-foreground/70 md:text-lg">
+                {heroSubtitle}
+              </p>
+              <div className="mt-6 flex gap-3">
+                <Button
+                  size="lg"
+                  className="text-sm font-bold uppercase tracking-wider"
+                  onClick={() => navigate("/shop")}
+                >
+                  {t("shopNow")} <ArrowRight className="size-4" />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Categories */}
       <section className="py-12 md:py-20">

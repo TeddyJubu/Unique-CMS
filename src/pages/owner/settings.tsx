@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { useOwnerAuth } from "@/lib/owner-auth"
 import { Button } from "@/components/ui/button"
@@ -28,6 +28,31 @@ export function OwnerSettingsPage() {
     ai_api_key: "",
     ai_model: settings?.ai_model || "",
   })
+  const [synced, setSynced] = useState(false)
+
+  // Settings load async; without this a fresh reload shows an empty form and
+  // saving would blank every field in the database. Sync once on arrival.
+  useEffect(() => {
+    if (settings && !synced) {
+      setForm({
+        shop_name: settings.shop_name || "",
+        shop_name_bn: settings.shop_name_bn || "",
+        whatsapp_number: settings.whatsapp_number || "",
+        bkash_number: settings.bkash_number || "",
+        delivery_inside_dhaka: String(settings.delivery_inside_dhaka ?? 60),
+        delivery_outside_dhaka: String(settings.delivery_outside_dhaka ?? 120),
+        hero_title: settings.hero_title || "",
+        hero_title_bn: settings.hero_title_bn || "",
+        hero_subtitle: settings.hero_subtitle || "",
+        hero_subtitle_bn: settings.hero_subtitle_bn || "",
+        owner_pin: "",
+        ai_api_url: settings.ai_api_url || "",
+        ai_api_key: "",
+        ai_model: settings.ai_model || "",
+      })
+      setSynced(true)
+    }
+  }, [settings, synced])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -296,7 +321,7 @@ export function OwnerSettingsPage() {
         <Button
           type="submit"
           size="lg"
-          disabled={saving}
+          disabled={saving || !settings}
           className="h-14 w-full rounded-xl text-base font-semibold"
         >
           {saving ? t("saving") : <><Save className="size-5" /> {t("saveSettings")}</>}

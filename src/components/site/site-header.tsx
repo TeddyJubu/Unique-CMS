@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Menu, ShoppingBag, Globe, Search, Heart } from "lucide-react"
+import { Menu, ShoppingBag, Globe, Search, Heart, User } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { useCart } from "@/lib/cart"
 import { useWishlist } from "@/lib/wishlist"
+import { useCustomer } from "@/lib/customer-auth"
 import { navigate } from "@/lib/router"
 import { cn } from "@/lib/utils"
 import type { Category, ShopSettings } from "@/lib/supabase"
@@ -12,13 +13,16 @@ import type { Category, ShopSettings } from "@/lib/supabase"
 export function SiteHeader({
   categories,
   settings,
+  topOffset = 0,
 }: {
   categories: Category[]
   settings: ShopSettings | null
+  topOffset?: number
 }) {
   const { locale, setLocale, t } = useI18n()
   const { itemCount } = useCart()
   const { count: wishCount } = useWishlist()
+  const { customer } = useCustomer()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
@@ -55,8 +59,9 @@ export function SiteHeader({
   return (
     <>
       <header
+        style={{ top: topOffset }}
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 border-b border-border transition-all",
+          "fixed left-0 right-0 z-40 border-b border-border transition-all",
           scrolled ? "bg-background/95 backdrop-blur-sm" : "bg-background"
         )}
       >
@@ -127,6 +132,21 @@ export function SiteHeader({
                 <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center bg-primary text-[10px] font-bold text-primary-foreground">
                   {wishCount}
                 </span>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/account")}
+              aria-label={t("myAccount")}
+              className="relative"
+            >
+              {customer ? (
+                <span className="flex size-6 items-center justify-center bg-primary text-xs font-bold uppercase text-primary-foreground">
+                  {customer.name.charAt(0)}
+                </span>
+              ) : (
+                <User className="size-5" />
               )}
             </Button>
             <Button
@@ -204,6 +224,15 @@ export function SiteHeader({
               }}
             >
               {t("trackOrder")}
+            </button>
+            <button
+              className="border-b border-border py-3 text-left text-sm font-medium uppercase tracking-wider text-foreground/80 transition-colors hover:text-primary"
+              onClick={() => {
+                navigate("/account")
+                setMobileOpen(false)
+              }}
+            >
+              {t("myAccount")}
             </button>
             <button
               className="border-b border-border py-3 text-left text-sm font-medium uppercase tracking-wider text-foreground/80 transition-colors hover:text-primary"

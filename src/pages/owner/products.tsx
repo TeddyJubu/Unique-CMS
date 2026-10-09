@@ -11,6 +11,7 @@ import { useOwnerAuth } from "@/lib/owner-auth"
 import { CmsLayout } from "@/components/site/cms-layout"
 import { Tag, Edit, Trash2, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { variantKey } from "@/lib/variants"
 
 export function OwnerProductsPage() {
   const { t, locale } = useI18n()
@@ -136,6 +137,8 @@ export function OwnerProductFormPage() {
   const [selectedSizes, setSelectedSizes] = useState<string[]>([])
   const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [imageUrls, setImageUrls] = useState("")
+  const [trackVariants, setTrackVariants] = useState(false)
+  const [variantQty, setVariantQty] = useState<Record<string, string>>({})
 
   const editId = new URLSearchParams(window.location.hash.split("?")[1] || "").get("id")
   const isEdit = !!editId
@@ -159,6 +162,12 @@ export function OwnerProductFormPage() {
         setSelectedSizes(p.sizes)
         setSelectedColors(p.colors)
         setImageUrls(p.product_images?.map((img) => img.image_url).join("\n") || "")
+        if (p.variant_stock && Object.keys(p.variant_stock).length > 0) {
+          setTrackVariants(true)
+          const qty: Record<string, string> = {}
+          for (const [k, v] of Object.entries(p.variant_stock)) qty[k] = String(v)
+          setVariantQty(qty)
+        }
       })
     }
   }, [editId, isEdit])
@@ -170,11 +179,30 @@ export function OwnerProductFormPage() {
     setSelectedColors((prev) => prev.includes(c) ? prev.filter(x => x !== c) : [...prev, c])
   }
 
+  const dimsSelected = selectedSizes.length > 0 || selectedColors.length > 0
+  const matrixRows = selectedSizes.length > 0 ? selectedSizes : [""]
+  const matrixCols = selectedColors.length > 0 ? selectedColors : [""]
+  const variantTotal = trackVariants
+    ? matrixRows.reduce(
+        (sum, s) => sum + matrixCols.reduce(
+          (inner, c) => inner + (parseInt(variantQty[variantKey(s, c)] ?? "") || 0), 0),
+        0)
+    : 0
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name || !form.price) return
     setLoading(true)
     try {
+      const useVariants = trackVariants && dimsSelected
+      const stockRecord: Record<string, number> = {}
+      if (useVariants) {
+        for (const s of matrixRows) {
+          for (const c of matrixCols) {
+            stockRecord[variantKey(s, c)] = Math.max(0, parseInt(variantQty[variantKey(s, c)] ?? "") || 0)
+          }
+        }
+      }
       const productData = {
         category_id: form.category_id || null,
         name: form.name,
@@ -185,7 +213,10 @@ export function OwnerProductFormPage() {
         compare_price: form.compare_price ? parseFloat(form.compare_price) : null,
         sizes: selectedSizes,
         colors: selectedColors,
-        stock: parseInt(form.stock) || 0,
+        stock: useVariants
+          ? Object.values(stockRecord).reduce((a, b) => a + b, 0)
+          : parseInt(form.stock) || 0,
+        variant_stock: stockRecord,
         is_featured: form.is_featured,
       }
       const urls = imageUrls.split("\n").filter((u) => u.trim())
@@ -344,6 +375,75 @@ export function OwnerProductFormPage() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Per-variant stock */}
+        <div className="rounded-xl border border-border bg-card p-5">
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              checked={trackVariants}
+              onChange={(e) => setTrackVariants(e.target.checked)}
+              className="size-5 rounded accent-primary"
+            />
+            <span className="text-sm font-medium">{t("trackVariantStock")}</span>
+          </label>
+          <p className="mt-1.5 text-xs text-muted-foreground">{t("trackVariantStockHelp")}</p>
+
+          {trackVariants && (
+            <div className="mt-4">
+              {!dimsSelected ? (
+                <p className="text-sm text-muted-foreground">{t("selectCombination")}</p>
+              ) : (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-sm">
+                      <thead>
+                        <tr>
+                          <th className="border border-border bg-muted px-2 py-2 text-left text-xs font-semibold uppercase text-muted-foreground">
+                            {t("size")} / {t("color")}
+                          </th>
+                          {matrixCols.map((c) => (
+                            <th key={c || "-"} className="border border-border bg-muted px-2 py-2 text-xs font-semibold uppercase text-muted-foreground">
+                              {c || "—"}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {matrixRows.map((s) => (
+                          <tr key={s || "-"}>
+                            <th className="border border-border bg-muted/50 px-2 py-1.5 text-left text-xs font-semibold uppercase">
+                              {s || "—"}
+                            </th>
+                            {matrixCols.map((c) => (
+                              <td key={c || "-"} className="border border-border p-1">
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="100000"
+                                  value={variantQty[variantKey(s, c)] ?? ""}
+                                  onChange={(e) =>
+                                    setVariantQty({ ...variantQty, [variantKey(s, c)]: e.target.value })
+                                  }
+                                  placeholder="0"
+                                  aria-label={`${s || "—"} / ${c || "—"}`}
+                                  className="h-10 w-full min-w-16 rounded-lg border border-input bg-background px-2 text-center text-sm focus:ring-2 focus:ring-ring focus:outline-none"
+                                />
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-2 text-sm font-semibold">
+                    {t("totalStock")}: <span className="text-primary">{variantTotal}</span>
+                  </p>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Images */}

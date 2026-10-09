@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { useCart } from "@/lib/cart"
+import { useCustomer } from "@/lib/customer-auth"
 import { navigate } from "@/lib/router"
 import { Button } from "@/components/ui/button"
 import { createOrder, fetchShopSettings, formatPrice, validateCoupon } from "@/lib/shop"
@@ -12,6 +13,7 @@ import { cn } from "@/lib/utils"
 export function CheckoutPage() {
   const { t, locale } = useI18n()
   const { items, subtotal, clearCart } = useCart()
+  const { customer, saveProfile } = useCustomer()
   const [settings, setSettings] = useState<ShopSettings | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<{ orderNumber: string } | null>(null)
@@ -35,6 +37,20 @@ export function CheckoutPage() {
   useEffect(() => {
     fetchShopSettings().then(setSettings).catch(console.error)
   }, [])
+
+  useEffect(() => {
+    if (customer) {
+      setForm((prev) => ({
+        ...prev,
+        customer_name: prev.customer_name || customer.name,
+        customer_phone: prev.customer_phone || customer.phone,
+        customer_address: prev.customer_address || customer.address || "",
+        district: prev.district || customer.district || "",
+        area_type: customer.area_type,
+      }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customer])
 
   const deliveryCharge = form.area_type === "inside_dhaka"
     ? (settings?.delivery_inside_dhaka ?? 60)
@@ -99,6 +115,13 @@ export function CheckoutPage() {
       )
       setSuccess({ orderNumber: order.order_number })
       clearCart()
+      saveProfile({
+        phone: form.customer_phone,
+        name: form.customer_name,
+        address: form.customer_address,
+        district: form.district,
+        area_type: form.area_type,
+      }).catch(() => {})
       // Fire-and-forget confirmation email; order is already placed.
       if (form.customer_email.trim()) {
         supabase.functions
