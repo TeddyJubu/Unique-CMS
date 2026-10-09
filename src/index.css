@@ -171,6 +171,7 @@
    Applied when .cms-light wraps owner pages
    ============================================================ */
 .cms-light {
+  color: var(--foreground);
   --radius: 0.75rem;
   --background: oklch(0.985 0.005 285);
   --foreground: oklch(0.25 0.01 285);
